@@ -1,4 +1,6 @@
 # https://github.com/pytorch/examples/blob/master/mnist/main.py
+# Taken from Sung Kim's tutorial
+
 from __future__ import print_function
 import argparse
 import torch
