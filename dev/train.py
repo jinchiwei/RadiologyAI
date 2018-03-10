@@ -1,10 +1,61 @@
+# -*- coding: utf-8 -*-
+from __future__ import print_function
 
-###### libraries ######
-import torchvision.models as models
+import argparse
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+import numpy as np
+
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.autograd import Variable
+
+from torch.utils.data import DataLoader
+from torch.utils.data.dataset import Dataset
+from torchvision import datasets, transforms, models
+import torch.optim.lr_scheduler as sch
+import torch.nn.functional as F
+
+import os, sys
+from skimage import io
+
+# from models import *
+# from data import *
+# from checkpoints import *
+
+from PIL import Image
+import time
 
 
-###### model ######
-def ResNet18_pretrained(n_classes,freeze=True):
+
+############ models ############
+# def Alexnet_pretrained(n_classes, freeze=True):
+#   ## get the pretrained model
+#   model = models.alexnet(pretrained=True)
+  
+#   ## freeze all weights
+#   if freeze:
+#     for param in model.parameters():
+#       param.requires_grad = False
+#   else:
+#     for param in model.parameters():
+#       param.requires_grad = True
+
+#   model.classifier = nn.Sequential(
+#             nn.Dropout(),
+#             nn.Linear(256 * 6 * 6, 4096),
+#             nn.ReLU(inplace=True),
+#             nn.Dropout(),
+#             nn.Linear(4096, 4096),
+#             nn.ReLU(inplace=True),
+#             nn.Linear(4096, n_classes),
+#         )
+  
+#   return model
+
+def ResNet18_pretrained(n_classes, freeze=True):
   model = models.__dict__['resnet18'](pretrained=True)
   ## freeze all weights
   if freeze:
@@ -21,76 +72,90 @@ def ResNet18_pretrained(n_classes,freeze=True):
 
 
 
-activity_classes = {
-  0:'activity_standing',
-  1:'activity_walking'
+############ dataloader ############
+directories = {'no_train' : 'no_THA_train',
+                'yes_train' : 'yes_THA_train',
+                'no_test' : 'no_THA_test',
+                'yes_test' : 'yes_THA_test',
+                'no_eval' : 'no_THA_eval',
+                'yes_eval' : 'yes_THA_eval'}
+
+result_classes = {
+  0:'no_THA',
+  1:'yes_THA'
 }
 
-
-###### dataloader ######
-class Diva2DImageDataset(Dataset):
-  def __init__(self, root_dir, transform=None):
+class THADataset(Dataset):
+  def __init__(self, train=True, transform=None):
     """
     Args:
-        root_dir (string): root directory, data should be organized as
-                      root/{activity_name}/{sample}/frame_N.png
-        transform (callable, optional): Optional transform to be applied
-            on a sample.
+        transform (callable, optional): Optional transform to be applied on a sample.
     """
-    self.root_dir = root_dir
     self.transform = transform
     self.sample_paths = []
-    self._init()
-
+    self._init(train)
 
   def __len__(self):
     return len(self.sample_paths)
 
   def __getitem__(self, idx):
-    img_path, label = self.sample_paths[idx]
-    x = io.imread(img_path)[:,:,:3]
+    img_path,label = self.sample_paths[idx]
+    x = io.imread(img_path) # x = io.imread(img_path)[:,:,:3]
+    x = np.resize(x, (x.shape[0], x.shape[1], 3))
     if self.transform:
       x = self.transform(x)
+    
     return (x,label)
 
-  def _init(self):
-    data_root = self.root_dir
-    activities = list(activity_classes.keys())
-    for act in activities:
-      act_dir = os.path.join(data_root, act)
-      samples = os.listdir(act_dir)
-      for sample in samples:
-        sample_dir = os.path.join(act_dir, sample)
-        for img_name in os.listdir(sample_dir):
-          img_path = os.path.join(sample_dir, img_name)
-          self.sample_paths.append((img_path,activity_classes[act]))
+  def _init(self, train):
+    no_THA_dir = ''
+    yes_THA_dir = ''
+    if train:
+      no_THA_dir = directories['no_train']
+      yes_THA_dir = directories['yes_train']
+    else:
+      no_THA_dir = directories['no_test']
+      yes_THA_dir = directories['yes_test']
+    
+    # NO  
+    samples = os.listdir(no_THA_dir)
+    for sample in samples:
+        if not sample.startswith('.'): # avoid .DS_Store
+            img_path = os.path.join(no_THA_dir, sample)
+            self.sample_paths.append((img_path,0))
+    # YES
+    samples = os.listdir(yes_THA_dir)
+    for sample in samples:
+        if not sample.startswith('.'): # avoid .DS_Store
+            img_path = os.path.join(yes_THA_dir, sample)
+            self.sample_paths.append((img_path, 1))
 
 
-###### training ######
 
+############ training ############
 ## LOG
-weight_out_dir = 'res18_LeftRightStop_allW'
-
+weight_out_dir = 'res18_weights'
 use_gpu = torch.cuda.is_available()
 
 ## TRAIN PARAMS
-n_classes = len(list(activity_classes.keys()))
+n_classes = len(list(result_classes.keys()))
 L2_weight_decay = 1e-5
-batch_size = 128
-num_epochs = 100
-lr = 0.01
+batch_size = 10
+num_epochs = 50
+lr = 0.001
 momentum = 0.9
 
 class_weights = None
 if use_gpu and class_weights is not None:
   class_weights = class_weights.cuda().float()
 
-
-
 def main():
-  model = Models.ResNet18_pretrained(n_classes,freeze=False)
-  #model = Models.DenseNet121_pretrained(n_classes,freeze=True)
-  criterion = nn.CrossEntropyLoss(weight=class_weights)
+  ## MODEL
+  model = ResNet18_pretrained(n_classes,freeze=False)
+  # model = Alexnet_pretrained(n_classes,freeze=False)
+  
+  ## LOSS PARAMETER
+  criterion = nn.CrossEntropyLoss(weight=class_weights) # equivalent to NLL Loss + softmax = cross entropy
   print("Starting!")
   if use_gpu:
     print("using gpu")
@@ -99,17 +164,13 @@ def main():
   sys.stdout.flush()
 
   optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=L2_weight_decay)
-  #optimizer = torch.optim.SGD(model.fc.parameters(), lr=lr, momentum=momentum, weight_decay=L2_weight_decay)
-  #optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=L2_weight_decay)
-  #optimizer = torch.optim.Adam(model.fc.parameters(),lr=lr,weight_decay=L2_weight_decay)
-  #optimizer = torch.optim.Adam(model.classifier.parameters(), lr=lr, weight_decay=L2_weight_decay)
-  exp_lr_scheduler = lr_scheduler.StepLR(optimizer,
-                                         step_size=50,
-                                         gamma=0.1)
+  # optimizer = torch.optim.SGD(model.fc.parameters(), lr=lr, momentum=momentum, weight_decay=L2_weight_decay)
+  # optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=L2_weight_decay)
+  # optimizer = torch.optim.Adam(model.fc.parameters(),lr=lr,weight_decay=L2_weight_decay)
+  # optimizer = torch.optim.Adam(model.classifier.parameters(), lr=lr, weight_decay=L2_weight_decay)
+  exp_lr_scheduler = sch.StepLR(optimizer, step_size=50, gamma=0.1)
 
-  model = train_model(model, criterion, optimizer,
-                      exp_lr_scheduler, num_epochs=num_epochs)
-
+  model = train_model(model, criterion, optimizer, exp_lr_scheduler, num_epochs=num_epochs)
 
 
 
@@ -122,6 +183,8 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225]),
+    # transforms.Normalize(mean=[103.6650538, 105.78144487, 107.41949705],
+    #                      std=[24.08016139, 22.86971233, 23.37795106]),
   ])
   val_data_transform = transforms.Compose([
     transforms.ToPILImage(),
@@ -130,14 +193,16 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225]),
+    # transforms.Normalize(mean=[103.6650538, 105.78144487, 107.41949705],
+    #                      std=[24.08016139, 22.86971233, 23.37795106]),
   ])
-  diva_train = Diva2DImageDataset(root_dir='/data/diva_crops/v1-act-crops/training',
-                            transform=train_data_transform)
-  diva_val = Diva2DImageDataset(root_dir='/data/diva_crops/v1-act-crops/validate',
-                                  transform=val_data_transform)
+  
+  radio_train = THADataset(train=True, transform=train_data_transform)
+  radio_val = THADataset(train=False, transform=val_data_transform)
+
   dataloaders = {
-    'train': DataLoader(diva_train, batch_size=batch_size, shuffle=True, num_workers=2),
-    'val': DataLoader(diva_val, batch_size=batch_size, shuffle=True, num_workers=2)
+    'train': DataLoader(radio_train, batch_size=batch_size, shuffle=True, num_workers=2),
+    'val': DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
   }
 
   ##### TRAIN ROUTINE
@@ -152,6 +217,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
   for epoch in range(num_epochs):
     print('Epoch {}/{}'.format(epoch, num_epochs - 1))
     print('-' * 10)
+
 
     epoch_info = [0] * 4
     # Each epoch has a training and validation phase
@@ -168,14 +234,19 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
       # Iterate over data.
       count = 0
       dataset_size = len(dataloaders[phase])
+      
       for data in dataloaders[phase]:
+        print(phase)
         # get the inputs
         inputs, labels = data
         if use_gpu:
           inputs = Variable(inputs.cuda()).float()
           labels = Variable(labels.cuda()).long()
         else:
-          inputs, labels = Variable(inputs).float(), Variable(labels).long()
+          inputs = Variable(inputs).float()
+          labels = Variable(labels).long()
+        
+        # increment the count
         count += 1
 
         # zero the parameter gradients
@@ -194,9 +265,6 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
         # statistics
         running_loss += loss.data[0]
         running_corrects += torch.sum(preds == labels.data)
-
-        # if preds[0]:
-        #          pdb.set_trace()
 
         print('{:d}/{:d}:  {:s}_loss: {:.3f}, {:s}_acc: {:.3f} \r'.format(batch_size*count,
                                                                           batch_size*dataset_size,
@@ -235,4 +303,9 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
   # load best model weights
   model.load_state_dict(best_model_wts)
   return model
+
+
+
+if __name__ == '__main__':
+  main()
 
