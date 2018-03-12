@@ -125,6 +125,9 @@ print(total)
 for data in radio_data_loader:
   inputs, labels = data
   
+  plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
+  plt.show()
+  
   if use_gpu:
     inputs = Variable(inputs.cuda()).float()
     labels = Variable(labels.cuda()).long()
