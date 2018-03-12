@@ -73,6 +73,7 @@ def ResNet18_pretrained(n_classes, freeze=True):
 
 
 ############ dataloader ############
+dataset_dir = 'dataset/80_20_00'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
                 'no_test' : 'no_THA_test',
@@ -111,11 +112,11 @@ class THADataset(Dataset):
     no_THA_dir = ''
     yes_THA_dir = ''
     if train:
-      no_THA_dir = directories['no_train']
-      yes_THA_dir = directories['yes_train']
+      no_THA_dir = os.path.join(dataset_dir, directories['no_train'])
+      yes_THA_dir = os.path.join(dataset_dir, directories['yes_train'])
     else:
-      no_THA_dir = directories['no_test']
-      yes_THA_dir = directories['yes_test']
+      no_THA_dir = os.path.join(dataset_dir, directories['no_test'])
+      yes_THA_dir = os.path.join(dataset_dir, directories['yes_test'])
     
     # NO  
     samples = os.listdir(no_THA_dir)
@@ -159,7 +160,7 @@ def main():
   print("Starting!")
   if use_gpu:
     print("using gpu")
-    model = model.cuda()
+    model = model.cuda()ofrr
     criterion = criterion.cuda()
   sys.stdout.flush()
 
@@ -236,7 +237,6 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
       dataset_size = len(dataloaders[phase])
       
       for data in dataloaders[phase]:
-        print(phase)
         # get the inputs
         inputs, labels = data
         if use_gpu:

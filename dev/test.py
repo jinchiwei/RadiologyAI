@@ -41,8 +41,8 @@ def ResNet18_pretrained(n_classes, freeze=True):
   return model
 
 
-
 ############ dataloader ############
+dataset_dir = 'dataset/80_20_00'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
                 'no_test' : 'no_THA_test',
@@ -78,8 +78,8 @@ class THADataset(Dataset):
     return (x,label)
 
   def _init(self, train):
-    no_THA_dir = directories['no_eval']
-    yes_THA_dir = directories['yes_eval']
+    no_THA_dir = os.path.join(dataset_dir, directories['no_eval'])
+    yes_THA_dir = os.path.join(dataset_dir, directories['yes_eval'])
     
     # NO  
     samples = os.listdir(no_THA_dir)
@@ -100,7 +100,7 @@ class THADataset(Dataset):
 use_gpu = torch.cuda.is_available()
 n_classes = len(list(result_classes.keys()))
 model = ResNet18_pretrained(n_classes,freeze=False)
-load_file = 'weights_60_20_20/res18_weights/003_0.950.pkl'
+load_file = 'weights_80_20_00/res18_weights/003_1.000.pkl'
 batch_size=10
 model.load_state_dict(torch.load(os.path.join('./', load_file)))
 
@@ -120,9 +120,9 @@ radio_data_loader = DataLoader(radio_val, batch_size=batch_size, shuffle=True, n
 model.train(False)
 
 running_corrects = 0
-count = 0
+total = len(radio_val.sample_paths)
+print(total)
 for data in radio_data_loader:
-  count += batch_size
   inputs, labels = data
   
   if use_gpu:
@@ -140,6 +140,6 @@ for data in radio_data_loader:
   running_corrects += torch.sum(preds == labels.data)
 
 print('---------  correct: {:03d} -----------'.format(running_corrects))
-print('---------  total: {:03d} -----------'.format(count))
-print('---------  accuracy: {:.4f} -----------'.format(running_corrects/count))
+print('---------  total: {:03d} -----------'.format(total))
+print('---------  accuracy: {:.4f} -----------'.format(running_corrects/total))
 
