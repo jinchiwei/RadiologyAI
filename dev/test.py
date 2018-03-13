@@ -3,7 +3,6 @@ from __future__ import print_function
 
 import argparse
 import matplotlib
-matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -25,6 +24,7 @@ from PIL import Image
 import time
 
 
+
 def ResNet18_pretrained(n_classes, freeze=True):
   model = models.__dict__['resnet18'](pretrained=True)
   ## freeze all weights
@@ -41,14 +41,15 @@ def ResNet18_pretrained(n_classes, freeze=True):
   return model
 
 
+
 ############ dataloader ############
-dataset_dir = 'dataset/80_20_00'
+dataset_dir = 'dataset/100_20_30'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
+                'no_val' : 'no_THA_val',
+                'yes_val' : 'yes_THA_val',
                 'no_test' : 'no_THA_test',
-                'yes_test' : 'yes_THA_test',
-                'no_eval' : 'no_THA_eval',
-                'yes_eval' : 'yes_THA_eval'}
+                'yes_test' : 'yes_THA_test'}
 
 result_classes = {
   0:'no_THA',
@@ -56,7 +57,7 @@ result_classes = {
 }
 
 class THADataset(Dataset):
-  def __init__(self, train=True, transform=None):
+  def __init__(self, train, transform=None):
     """
     Args:
         transform (callable, optional): Optional transform to be applied on a sample.
@@ -78,8 +79,18 @@ class THADataset(Dataset):
     return (x,label)
 
   def _init(self, train):
-    no_THA_dir = os.path.join(dataset_dir, directories['no_eval'])
-    yes_THA_dir = os.path.join(dataset_dir, directories['yes_eval'])
+    no_THA_dir = ''
+    yes_THA_dir = ''
+    if train is 'train':
+      no_THA_dir = os.path.join(dataset_dir, directories['no_train'])
+      yes_THA_dir = os.path.join(dataset_dir, directories['yes_train'])
+    elif train is 'val':
+      no_THA_dir = os.path.join(dataset_dir, directories['no_val'])
+      yes_THA_dir = os.path.join(dataset_dir, directories['yes_val'])
+    else: # train is 'test'
+      no_THA_dir = os.path.join(dataset_dir, directories['no_test'])
+      yes_THA_dir = os.path.join(dataset_dir, directories['yes_test'])
+
     
     # NO  
     samples = os.listdir(no_THA_dir)
@@ -96,11 +107,13 @@ class THADataset(Dataset):
 
 
 
+
+
 ############ testing ############
 use_gpu = torch.cuda.is_available()
 n_classes = len(list(result_classes.keys()))
 model = ResNet18_pretrained(n_classes,freeze=False)
-load_file = 'weights_80_20_00/res18_weights/003_1.000.pkl'
+load_file = 'weights_100_20_30/res18_weights/017_0.950.pkl'
 batch_size=10
 model.load_state_dict(torch.load(os.path.join('./', load_file)))
 
@@ -109,12 +122,12 @@ val_data_transform = transforms.Compose([
     transforms.Resize((256, 256)),
     transforms.CenterCrop(224),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225]),
-    # transforms.Normalize(mean=[103.6650538, 105.78144487, 107.41949705],
-    #                      std=[24.08016139, 22.86971233, 23.37795106]),
+    # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                      std=[0.229, 0.224, 0.225]),
+    # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+    #                      std=[0.21329397, 0.215493, 0.21677108]),
   ])
-radio_val = THADataset(train=False, transform=val_data_transform)
+radio_val = THADataset(train='test', transform=val_data_transform)
 radio_data_loader = DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
 
 model.train(False)
@@ -125,9 +138,10 @@ print(total)
 for data in radio_data_loader:
   inputs, labels = data
   
-  plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
-  plt.show()
-  
+  # plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
+  # plt.show()
+
+  original = inputs
   if use_gpu:
     inputs = Variable(inputs.cuda()).float()
     labels = Variable(labels.cuda()).long()
@@ -141,6 +155,12 @@ for data in radio_data_loader:
 
   # statistics
   running_corrects += torch.sum(preds == labels.data)
+
+  for idx in range(len(original)):
+    if (preds != labels.data)[idx]:
+      plt.imshow(np.transpose(original.numpy()[idx], (1,2,0)))
+      plt.show()
+      # print('here', idx)
 
 print('---------  correct: {:03d} -----------'.format(running_corrects))
 print('---------  total: {:03d} -----------'.format(total))

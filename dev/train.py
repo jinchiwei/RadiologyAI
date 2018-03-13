@@ -3,7 +3,6 @@ from __future__ import print_function
 
 import argparse
 import matplotlib
-matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -30,31 +29,6 @@ import time
 
 
 
-############ models ############
-# def Alexnet_pretrained(n_classes, freeze=True):
-#   ## get the pretrained model
-#   model = models.alexnet(pretrained=True)
-  
-#   ## freeze all weights
-#   if freeze:
-#     for param in model.parameters():
-#       param.requires_grad = False
-#   else:
-#     for param in model.parameters():
-#       param.requires_grad = True
-
-#   model.classifier = nn.Sequential(
-#             nn.Dropout(),
-#             nn.Linear(256 * 6 * 6, 4096),
-#             nn.ReLU(inplace=True),
-#             nn.Dropout(),
-#             nn.Linear(4096, 4096),
-#             nn.ReLU(inplace=True),
-#             nn.Linear(4096, n_classes),
-#         )
-  
-#   return model
-
 def ResNet18_pretrained(n_classes, freeze=True):
   model = models.__dict__['resnet18'](pretrained=True)
   ## freeze all weights
@@ -73,13 +47,13 @@ def ResNet18_pretrained(n_classes, freeze=True):
 
 
 ############ dataloader ############
-dataset_dir = 'dataset/80_20_00'
+dataset_dir = 'dataset/100_20_30'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
+                'no_val' : 'no_THA_val',
+                'yes_val' : 'yes_THA_val',
                 'no_test' : 'no_THA_test',
-                'yes_test' : 'yes_THA_test',
-                'no_eval' : 'no_THA_eval',
-                'yes_eval' : 'yes_THA_eval'}
+                'yes_test' : 'yes_THA_test'}
 
 result_classes = {
   0:'no_THA',
@@ -87,7 +61,7 @@ result_classes = {
 }
 
 class THADataset(Dataset):
-  def __init__(self, train=True, transform=None):
+  def __init__(self, train, transform=None):
     """
     Args:
         transform (callable, optional): Optional transform to be applied on a sample.
@@ -111,12 +85,16 @@ class THADataset(Dataset):
   def _init(self, train):
     no_THA_dir = ''
     yes_THA_dir = ''
-    if train:
+    if train is 'train':
       no_THA_dir = os.path.join(dataset_dir, directories['no_train'])
       yes_THA_dir = os.path.join(dataset_dir, directories['yes_train'])
-    else:
+    elif train is 'val':
+      no_THA_dir = os.path.join(dataset_dir, directories['no_val'])
+      yes_THA_dir = os.path.join(dataset_dir, directories['yes_val'])
+    else: # train is 'test'
       no_THA_dir = os.path.join(dataset_dir, directories['no_test'])
       yes_THA_dir = os.path.join(dataset_dir, directories['yes_test'])
+
     
     # NO  
     samples = os.listdir(no_THA_dir)
@@ -160,7 +138,7 @@ def main():
   print("Starting!")
   if use_gpu:
     print("using gpu")
-    model = model.cuda()ofrr
+    model = model.cuda()
     criterion = criterion.cuda()
   sys.stdout.flush()
 
@@ -182,24 +160,24 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
     transforms.RandomCrop(224),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225]),
-    # transforms.Normalize(mean=[103.6650538, 105.78144487, 107.41949705],
-    #                      std=[24.08016139, 22.86971233, 23.37795106]),
+    # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                      std=[0.229, 0.224, 0.225]),
+    # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+    #                      std=[0.21329397, 0.215493, 0.21677108]),
   ])
   val_data_transform = transforms.Compose([
     transforms.ToPILImage(),
     transforms.Resize((256, 256)),
     transforms.CenterCrop(224),
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                         std=[0.229, 0.224, 0.225]),
-    # transforms.Normalize(mean=[103.6650538, 105.78144487, 107.41949705],
-    #                      std=[24.08016139, 22.86971233, 23.37795106]),
+    # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                      std=[0.229, 0.224, 0.225]),
+    # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+    #                      std=[0.21329397, 0.215493, 0.21677108]),
   ])
   
-  radio_train = THADataset(train=True, transform=train_data_transform)
-  radio_val = THADataset(train=False, transform=val_data_transform)
+  radio_train = THADataset(train='train', transform=train_data_transform)
+  radio_val = THADataset(train='val', transform=val_data_transform)
 
   dataloaders = {
     'train': DataLoader(radio_train, batch_size=batch_size, shuffle=True, num_workers=2),
