@@ -12,102 +12,25 @@ import torch.optim as optim
 from torch.autograd import Variable
 
 from torch.utils.data import DataLoader
-from torch.utils.data.dataset import Dataset
-from torchvision import datasets, transforms, models
+from torchvision import datasets, transforms
 import torch.optim.lr_scheduler as sch
 import torch.nn.functional as F
 
 import os, sys
 from skimage import io
 
-# from models import *
-# from data import *
-# from checkpoints import *
-
 from PIL import Image
 import time
 
+from models import ResNet18_pretrained, GoogLeNet_pretrained
+from dataset import THADataset
 
 
-def ResNet18_pretrained(n_classes, freeze=True):
-  model = models.__dict__['resnet18'](pretrained=True)
-  ## freeze all weights
-  if freeze:
-    for param in model.parameters():
-      param.requires_grad = False
-  else:
-    for param in model.parameters():
-      param.requires_grad = True
-
-  ## change the last 1000-fc to n_classes
-  num_filters = model.fc.in_features
-  model.fc = nn.Linear(num_filters,n_classes)
-  return model
-
-
-
-############ dataloader ############
-dataset_dir = 'dataset/100_20_30'
-directories = {'no_train' : 'no_THA_train',
-                'yes_train' : 'yes_THA_train',
-                'no_val' : 'no_THA_val',
-                'yes_val' : 'yes_THA_val',
-                'no_test' : 'no_THA_test',
-                'yes_test' : 'yes_THA_test'}
 
 result_classes = {
   0:'no_THA',
   1:'yes_THA'
 }
-
-class THADataset(Dataset):
-  def __init__(self, train, transform=None):
-    """
-    Args:
-        transform (callable, optional): Optional transform to be applied on a sample.
-    """
-    self.transform = transform
-    self.sample_paths = []
-    self._init(train)
-
-  def __len__(self):
-    return len(self.sample_paths)
-
-  def __getitem__(self, idx):
-    img_path,label = self.sample_paths[idx]
-    x = io.imread(img_path) # x = io.imread(img_path)[:,:,:3]
-    x = np.resize(x, (x.shape[0], x.shape[1], 3))
-    if self.transform:
-      x = self.transform(x)
-    
-    return (x,label)
-
-  def _init(self, train):
-    no_THA_dir = ''
-    yes_THA_dir = ''
-    if train is 'train':
-      no_THA_dir = os.path.join(dataset_dir, directories['no_train'])
-      yes_THA_dir = os.path.join(dataset_dir, directories['yes_train'])
-    elif train is 'val':
-      no_THA_dir = os.path.join(dataset_dir, directories['no_val'])
-      yes_THA_dir = os.path.join(dataset_dir, directories['yes_val'])
-    else: # train is 'test'
-      no_THA_dir = os.path.join(dataset_dir, directories['no_test'])
-      yes_THA_dir = os.path.join(dataset_dir, directories['yes_test'])
-
-    
-    # NO  
-    samples = os.listdir(no_THA_dir)
-    for sample in samples:
-        if not sample.startswith('.'): # avoid .DS_Store
-            img_path = os.path.join(no_THA_dir, sample)
-            self.sample_paths.append((img_path,0))
-    # YES
-    samples = os.listdir(yes_THA_dir)
-    for sample in samples:
-        if not sample.startswith('.'): # avoid .DS_Store
-            img_path = os.path.join(yes_THA_dir, sample)
-            self.sample_paths.append((img_path, 1))
 
 
 
@@ -130,8 +53,8 @@ if use_gpu and class_weights is not None:
 
 def main():
   ## MODEL
-  model = ResNet18_pretrained(n_classes,freeze=False)
-  # model = Alexnet_pretrained(n_classes,freeze=False)
+  # model = ResNet18_pretrained(n_classes,freeze=False)
+  model = GoogLeNet_pretrained(n_classes,freeze=False)
   
   ## LOSS PARAMETER
   criterion = nn.CrossEntropyLoss(weight=class_weights) # equivalent to NLL Loss + softmax = cross entropy
@@ -156,8 +79,10 @@ def main():
 def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
   train_data_transform = transforms.Compose([
     transforms.ToPILImage(),
-    transforms.Resize((256, 256)),
-    transforms.RandomCrop(224),
+    # transforms.Resize((256, 256)),
+    transforms.Resize((32, 32)),
+    # transforms.RandomCrop(224),
+    transforms.RandomCrop(32),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
     # transforms.Normalize(mean=[0.485, 0.456, 0.406],
@@ -167,8 +92,10 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
   ])
   val_data_transform = transforms.Compose([
     transforms.ToPILImage(),
-    transforms.Resize((256, 256)),
-    transforms.CenterCrop(224),
+    # transforms.Resize((256, 256)),
+    transforms.Resize((32, 32)),
+    # transforms.CenterCrop(224),
+    transforms.CenterCrop(32),
     transforms.ToTensor(),
     # transforms.Normalize(mean=[0.485, 0.456, 0.406],
     #                      std=[0.229, 0.224, 0.225]),

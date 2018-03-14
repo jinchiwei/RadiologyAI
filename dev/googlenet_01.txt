@@ -1,0 +1,253 @@
+Starting!
+Epoch 0/49
+----------
+10/100:  train_loss: 0.694, train_acc: 0.700 20/100:  train_loss: 0.690, train_acc: 0.600 30/100:  train_loss: 0.701, train_acc: 0.533 40/100:  train_loss: 0.708, train_acc: 0.500 50/100:  train_loss: 0.705, train_acc: 0.460 60/100:  train_loss: 0.701, train_acc: 0.500 70/100:  train_loss: 0.695, train_acc: 0.543 80/100:  train_loss: 0.689, train_acc: 0.562 90/100:  train_loss: 0.687, train_acc: 0.567 100/100:  train_loss: 0.684, train_acc: 0.570 ---------  train Loss: 0.6844 Acc: 0.5700 -----------
+10/20:  val_loss: 0.684, val_acc: 0.600 20/20:  val_loss: 0.695, val_acc: 0.500 ---------  val Loss: 0.6946 Acc: 0.5000 -----------
+
+Epoch 1/49
+----------
+10/100:  train_loss: 0.638, train_acc: 0.600 20/100:  train_loss: 0.642, train_acc: 0.600 30/100:  train_loss: 0.645, train_acc: 0.667 40/100:  train_loss: 0.631, train_acc: 0.725 50/100:  train_loss: 0.622, train_acc: 0.740 60/100:  train_loss: 0.617, train_acc: 0.733 70/100:  train_loss: 0.627, train_acc: 0.729 80/100:  train_loss: 0.635, train_acc: 0.713 90/100:  train_loss: 0.636, train_acc: 0.700 100/100:  train_loss: 0.633, train_acc: 0.690 ---------  train Loss: 0.6330 Acc: 0.6900 -----------
+10/20:  val_loss: 0.663, val_acc: 0.800 20/20:  val_loss: 0.695, val_acc: 0.500 ---------  val Loss: 0.6946 Acc: 0.5000 -----------
+
+Epoch 2/49
+----------
+10/100:  train_loss: 0.490, train_acc: 0.800 20/100:  train_loss: 0.526, train_acc: 0.750 30/100:  train_loss: 0.522, train_acc: 0.767 40/100:  train_loss: 0.525, train_acc: 0.750 50/100:  train_loss: 0.506, train_acc: 0.780 60/100:  train_loss: 0.506, train_acc: 0.783 70/100:  train_loss: 0.523, train_acc: 0.786 80/100:  train_loss: 0.522, train_acc: 0.775 90/100:  train_loss: 0.531, train_acc: 0.744 100/100:  train_loss: 0.527, train_acc: 0.730 ---------  train Loss: 0.5266 Acc: 0.7300 -----------
+10/20:  val_loss: 0.676, val_acc: 0.600 20/20:  val_loss: 0.733, val_acc: 0.500 ---------  val Loss: 0.7332 Acc: 0.5000 -----------
+
+Epoch 3/49
+----------
+10/100:  train_loss: 0.606, train_acc: 0.800 20/100:  train_loss: 0.599, train_acc: 0.750 30/100:  train_loss: 0.546, train_acc: 0.800 40/100:  train_loss: 0.499, train_acc: 0.850 50/100:  train_loss: 0.481, train_acc: 0.840 60/100:  train_loss: 0.466, train_acc: 0.850 70/100:  train_loss: 0.470, train_acc: 0.829 80/100:  train_loss: 0.453, train_acc: 0.850 90/100:  train_loss: 0.496, train_acc: 0.833 100/100:  train_loss: 0.499, train_acc: 0.830 ---------  train Loss: 0.4986 Acc: 0.8300 -----------
+10/20:  val_loss: 0.871, val_acc: 0.500 20/20:  val_loss: 0.871, val_acc: 0.500 ---------  val Loss: 0.8712 Acc: 0.5000 -----------
+
+Epoch 4/49
+----------
+10/100:  train_loss: 0.352, train_acc: 0.900 20/100:  train_loss: 0.444, train_acc: 0.750 30/100:  train_loss: 0.414, train_acc: 0.800 40/100:  train_loss: 0.460, train_acc: 0.725 50/100:  train_loss: 0.467, train_acc: 0.740 60/100:  train_loss: 0.444, train_acc: 0.783 70/100:  train_loss: 0.451, train_acc: 0.786 80/100:  train_loss: 0.440, train_acc: 0.800 90/100:  train_loss: 0.471, train_acc: 0.767 100/100:  train_loss: 0.479, train_acc: 0.770 ---------  train Loss: 0.4794 Acc: 0.7700 -----------
+10/20:  val_loss: 0.805, val_acc: 0.500 20/20:  val_loss: 0.824, val_acc: 0.500 ---------  val Loss: 0.8241 Acc: 0.5000 -----------
+
+Epoch 5/49
+----------
+10/100:  train_loss: 0.487, train_acc: 0.800 20/100:  train_loss: 0.463, train_acc: 0.750 30/100:  train_loss: 0.509, train_acc: 0.800 40/100:  train_loss: 0.452, train_acc: 0.825 50/100:  train_loss: 0.411, train_acc: 0.840 60/100:  train_loss: 0.395, train_acc: 0.850 70/100:  train_loss: 0.380, train_acc: 0.871 80/100:  train_loss: 0.369, train_acc: 0.875 90/100:  train_loss: 0.363, train_acc: 0.878 100/100:  train_loss: 0.379, train_acc: 0.870 ---------  train Loss: 0.3792 Acc: 0.8700 -----------
+10/20:  val_loss: 0.398, val_acc: 0.800 20/20:  val_loss: 0.515, val_acc: 0.700 ---------  val Loss: 0.5149 Acc: 0.7000 -----------
+
+Epoch 6/49
+----------
+10/100:  train_loss: 0.211, train_acc: 1.000 20/100:  train_loss: 0.224, train_acc: 1.000 30/100:  train_loss: 0.248, train_acc: 0.967 40/100:  train_loss: 0.236, train_acc: 0.975 50/100:  train_loss: 0.330, train_acc: 0.880 60/100:  train_loss: 0.341, train_acc: 0.867 70/100:  train_loss: 0.370, train_acc: 0.843 80/100:  train_loss: 0.351, train_acc: 0.863 90/100:  train_loss: 0.380, train_acc: 0.856 100/100:  train_loss: 0.371, train_acc: 0.860 ---------  train Loss: 0.3712 Acc: 0.8600 -----------
+10/20:  val_loss: 0.498, val_acc: 0.700 20/20:  val_loss: 0.372, val_acc: 0.800 ---------  val Loss: 0.3719 Acc: 0.8000 -----------
+
+Epoch 7/49
+----------
+10/100:  train_loss: 0.297, train_acc: 0.800 20/100:  train_loss: 0.272, train_acc: 0.850 30/100:  train_loss: 0.338, train_acc: 0.833 40/100:  train_loss: 0.317, train_acc: 0.850 50/100:  train_loss: 0.309, train_acc: 0.860 60/100:  train_loss: 0.314, train_acc: 0.867 70/100:  train_loss: 0.317, train_acc: 0.871 80/100:  train_loss: 0.306, train_acc: 0.887 90/100:  train_loss: 0.293, train_acc: 0.900 100/100:  train_loss: 0.283, train_acc: 0.910 ---------  train Loss: 0.2827 Acc: 0.9100 -----------
+10/20:  val_loss: 0.474, val_acc: 0.700 20/20:  val_loss: 0.322, val_acc: 0.850 ---------  val Loss: 0.3218 Acc: 0.8500 -----------
+
+Epoch 8/49
+----------
+10/100:  train_loss: 0.218, train_acc: 0.900 20/100:  train_loss: 0.204, train_acc: 0.950 30/100:  train_loss: 0.169, train_acc: 0.967 40/100:  train_loss: 0.224, train_acc: 0.900 50/100:  train_loss: 0.215, train_acc: 0.920 60/100:  train_loss: 0.223, train_acc: 0.917 70/100:  train_loss: 0.211, train_acc: 0.929 80/100:  train_loss: 0.202, train_acc: 0.938 90/100:  train_loss: 0.202, train_acc: 0.933 100/100:  train_loss: 0.206, train_acc: 0.930 ---------  train Loss: 0.2056 Acc: 0.9300 -----------
+10/20:  val_loss: 0.132, val_acc: 1.000 20/20:  val_loss: 0.409, val_acc: 0.850 ---------  val Loss: 0.4087 Acc: 0.8500 -----------
+
+Epoch 9/49
+----------
+10/100:  train_loss: 0.144, train_acc: 1.000 20/100:  train_loss: 0.178, train_acc: 0.950 30/100:  train_loss: 0.144, train_acc: 0.967 40/100:  train_loss: 0.153, train_acc: 0.950 50/100:  train_loss: 0.158, train_acc: 0.940 60/100:  train_loss: 0.146, train_acc: 0.950 70/100:  train_loss: 0.137, train_acc: 0.957 80/100:  train_loss: 0.133, train_acc: 0.963 90/100:  train_loss: 0.135, train_acc: 0.967 100/100:  train_loss: 0.145, train_acc: 0.960 ---------  train Loss: 0.1454 Acc: 0.9600 -----------
+10/20:  val_loss: 0.118, val_acc: 1.000 20/20:  val_loss: 0.301, val_acc: 0.950 ---------  val Loss: 0.3006 Acc: 0.9500 -----------
+
+Epoch 10/49
+----------
+10/100:  train_loss: 0.115, train_acc: 1.000 20/100:  train_loss: 0.095, train_acc: 1.000 30/100:  train_loss: 0.084, train_acc: 1.000 40/100:  train_loss: 0.093, train_acc: 1.000 50/100:  train_loss: 0.108, train_acc: 0.980 60/100:  train_loss: 0.100, train_acc: 0.983 70/100:  train_loss: 0.096, train_acc: 0.986 80/100:  train_loss: 0.093, train_acc: 0.988 90/100:  train_loss: 0.097, train_acc: 0.989 100/100:  train_loss: 0.095, train_acc: 0.990 ---------  train Loss: 0.0947 Acc: 0.9900 -----------
+10/20:  val_loss: 1.303, val_acc: 0.600 20/20:  val_loss: 0.791, val_acc: 0.750 ---------  val Loss: 0.7908 Acc: 0.7500 -----------
+
+Epoch 11/49
+----------
+10/100:  train_loss: 0.174, train_acc: 1.000 20/100:  train_loss: 0.154, train_acc: 1.000 30/100:  train_loss: 0.160, train_acc: 0.967 40/100:  train_loss: 0.225, train_acc: 0.900 50/100:  train_loss: 0.201, train_acc: 0.900 60/100:  train_loss: 0.182, train_acc: 0.917 70/100:  train_loss: 0.163, train_acc: 0.929 80/100:  train_loss: 0.150, train_acc: 0.938 90/100:  train_loss: 0.185, train_acc: 0.911 100/100:  train_loss: 0.173, train_acc: 0.920 ---------  train Loss: 0.1729 Acc: 0.9200 -----------
+10/20:  val_loss: 0.309, val_acc: 0.900 20/20:  val_loss: 0.480, val_acc: 0.800 ---------  val Loss: 0.4805 Acc: 0.8000 -----------
+
+Epoch 12/49
+----------
+10/100:  train_loss: 0.062, train_acc: 1.000 20/100:  train_loss: 0.064, train_acc: 1.000 30/100:  train_loss: 0.078, train_acc: 1.000 40/100:  train_loss: 0.138, train_acc: 0.950 50/100:  train_loss: 0.311, train_acc: 0.860 60/100:  train_loss: 0.285, train_acc: 0.883 70/100:  train_loss: 0.253, train_acc: 0.900 80/100:  train_loss: 0.235, train_acc: 0.900 90/100:  train_loss: 0.214, train_acc: 0.911 100/100:  train_loss: 0.219, train_acc: 0.920 ---------  train Loss: 0.2189 Acc: 0.9200 -----------
+10/20:  val_loss: 0.243, val_acc: 0.900 20/20:  val_loss: 0.286, val_acc: 0.900 ---------  val Loss: 0.2856 Acc: 0.9000 -----------
+
+Epoch 13/49
+----------
+10/100:  train_loss: 0.067, train_acc: 1.000 20/100:  train_loss: 0.081, train_acc: 1.000 30/100:  train_loss: 0.194, train_acc: 0.900 40/100:  train_loss: 0.177, train_acc: 0.925 50/100:  train_loss: 0.149, train_acc: 0.940 60/100:  train_loss: 0.137, train_acc: 0.950 70/100:  train_loss: 0.136, train_acc: 0.943 80/100:  train_loss: 0.160, train_acc: 0.925 90/100:  train_loss: 0.244, train_acc: 0.878 100/100:  train_loss: 0.232, train_acc: 0.890 ---------  train Loss: 0.2319 Acc: 0.8900 -----------
+10/20:  val_loss: 0.208, val_acc: 0.800 20/20:  val_loss: 0.322, val_acc: 0.800 ---------  val Loss: 0.3223 Acc: 0.8000 -----------
+
+Epoch 14/49
+----------
+10/100:  train_loss: 0.121, train_acc: 1.000 20/100:  train_loss: 0.086, train_acc: 1.000 30/100:  train_loss: 0.084, train_acc: 1.000 40/100:  train_loss: 0.102, train_acc: 0.975 50/100:  train_loss: 0.129, train_acc: 0.960 60/100:  train_loss: 0.125, train_acc: 0.967 70/100:  train_loss: 0.116, train_acc: 0.971 80/100:  train_loss: 0.118, train_acc: 0.963 90/100:  train_loss: 0.148, train_acc: 0.944 100/100:  train_loss: 0.149, train_acc: 0.950 ---------  train Loss: 0.1495 Acc: 0.9500 -----------
+10/20:  val_loss: 2.132, val_acc: 0.800 20/20:  val_loss: 1.293, val_acc: 0.750 ---------  val Loss: 1.2926 Acc: 0.7500 -----------
+
+Epoch 15/49
+----------
+10/100:  train_loss: 0.493, train_acc: 0.700 20/100:  train_loss: 0.276, train_acc: 0.850 30/100:  train_loss: 0.433, train_acc: 0.733 40/100:  train_loss: 0.398, train_acc: 0.775 50/100:  train_loss: 0.446, train_acc: 0.760 60/100:  train_loss: 0.464, train_acc: 0.783 70/100:  train_loss: 0.402, train_acc: 0.814 80/100:  train_loss: 0.375, train_acc: 0.825 90/100:  train_loss: 0.346, train_acc: 0.844 100/100:  train_loss: 0.449, train_acc: 0.820 ---------  train Loss: 0.4485 Acc: 0.8200 -----------
+10/20:  val_loss: 0.297, val_acc: 0.900 20/20:  val_loss: 0.364, val_acc: 0.800 ---------  val Loss: 0.3641 Acc: 0.8000 -----------
+
+Epoch 16/49
+----------
+10/100:  train_loss: 0.113, train_acc: 1.000 20/100:  train_loss: 0.268, train_acc: 0.950 30/100:  train_loss: 0.210, train_acc: 0.967 40/100:  train_loss: 0.197, train_acc: 0.950 50/100:  train_loss: 0.169, train_acc: 0.960 60/100:  train_loss: 0.173, train_acc: 0.950 70/100:  train_loss: 0.162, train_acc: 0.957 80/100:  train_loss: 0.156, train_acc: 0.963 90/100:  train_loss: 0.148, train_acc: 0.967 100/100:  train_loss: 0.148, train_acc: 0.960 ---------  train Loss: 0.1477 Acc: 0.9600 -----------
+10/20:  val_loss: 0.273, val_acc: 0.900 20/20:  val_loss: 0.234, val_acc: 0.850 ---------  val Loss: 0.2339 Acc: 0.8500 -----------
+
+Epoch 17/49
+----------
+10/100:  train_loss: 0.097, train_acc: 1.000 20/100:  train_loss: 0.110, train_acc: 1.000 30/100:  train_loss: 0.106, train_acc: 1.000 40/100:  train_loss: 0.309, train_acc: 0.950 50/100:  train_loss: 0.298, train_acc: 0.940 60/100:  train_loss: 0.375, train_acc: 0.900 70/100:  train_loss: 0.353, train_acc: 0.900 80/100:  train_loss: 0.320, train_acc: 0.912 90/100:  train_loss: 0.294, train_acc: 0.922 100/100:  train_loss: 0.276, train_acc: 0.920 ---------  train Loss: 0.2756 Acc: 0.9200 -----------
+10/20:  val_loss: 0.506, val_acc: 0.700 20/20:  val_loss: 0.277, val_acc: 0.850 ---------  val Loss: 0.2774 Acc: 0.8500 -----------
+
+Epoch 18/49
+----------
+10/100:  train_loss: 0.052, train_acc: 1.000 20/100:  train_loss: 0.063, train_acc: 1.000 30/100:  train_loss: 0.069, train_acc: 1.000 40/100:  train_loss: 0.096, train_acc: 0.975 50/100:  train_loss: 0.135, train_acc: 0.960 60/100:  train_loss: 0.146, train_acc: 0.950 70/100:  train_loss: 0.139, train_acc: 0.957 80/100:  train_loss: 0.149, train_acc: 0.938 90/100:  train_loss: 0.139, train_acc: 0.944 100/100:  train_loss: 0.165, train_acc: 0.930 ---------  train Loss: 0.1651 Acc: 0.9300 -----------
+10/20:  val_loss: 0.076, val_acc: 1.000 20/20:  val_loss: 0.377, val_acc: 0.800 ---------  val Loss: 0.3769 Acc: 0.8000 -----------
+
+Epoch 19/49
+----------
+10/100:  train_loss: 0.066, train_acc: 1.000 20/100:  train_loss: 0.054, train_acc: 1.000 30/100:  train_loss: 0.110, train_acc: 0.967 40/100:  train_loss: 0.103, train_acc: 0.975 50/100:  train_loss: 0.105, train_acc: 0.980 60/100:  train_loss: 0.094, train_acc: 0.983 70/100:  train_loss: 0.110, train_acc: 0.971 80/100:  train_loss: 0.103, train_acc: 0.975 90/100:  train_loss: 0.110, train_acc: 0.967 100/100:  train_loss: 0.121, train_acc: 0.970 ---------  train Loss: 0.1207 Acc: 0.9700 -----------
+10/20:  val_loss: 0.169, val_acc: 0.900 20/20:  val_loss: 0.277, val_acc: 0.850 ---------  val Loss: 0.2768 Acc: 0.8500 -----------
+
+Epoch 20/49
+----------
+10/100:  train_loss: 0.038, train_acc: 1.000 20/100:  train_loss: 0.048, train_acc: 1.000 30/100:  train_loss: 0.043, train_acc: 1.000 40/100:  train_loss: 0.070, train_acc: 1.000 50/100:  train_loss: 0.068, train_acc: 1.000 60/100:  train_loss: 0.070, train_acc: 1.000 70/100:  train_loss: 0.075, train_acc: 1.000 80/100:  train_loss: 0.071, train_acc: 1.000 90/100:  train_loss: 0.067, train_acc: 1.000 100/100:  train_loss: 0.065, train_acc: 1.000 ---------  train Loss: 0.0650 Acc: 1.0000 -----------
+10/20:  val_loss: 0.111, val_acc: 1.000 20/20:  val_loss: 0.235, val_acc: 0.900 ---------  val Loss: 0.2345 Acc: 0.9000 -----------
+
+Epoch 21/49
+----------
+10/100:  train_loss: 0.031, train_acc: 1.000 20/100:  train_loss: 0.027, train_acc: 1.000 30/100:  train_loss: 0.036, train_acc: 1.000 40/100:  train_loss: 0.128, train_acc: 0.950 50/100:  train_loss: 0.109, train_acc: 0.960 60/100:  train_loss: 0.123, train_acc: 0.967 70/100:  train_loss: 0.155, train_acc: 0.957 80/100:  train_loss: 0.143, train_acc: 0.963 90/100:  train_loss: 0.150, train_acc: 0.956 100/100:  train_loss: 0.153, train_acc: 0.960 ---------  train Loss: 0.1535 Acc: 0.9600 -----------
+10/20:  val_loss: 0.396, val_acc: 0.800 20/20:  val_loss: 0.341, val_acc: 0.800 ---------  val Loss: 0.3414 Acc: 0.8000 -----------
+
+Epoch 22/49
+----------
+10/100:  train_loss: 0.076, train_acc: 1.000 20/100:  train_loss: 0.062, train_acc: 1.000 30/100:  train_loss: 0.060, train_acc: 1.000 40/100:  train_loss: 0.068, train_acc: 1.000 50/100:  train_loss: 0.104, train_acc: 0.980 60/100:  train_loss: 0.091, train_acc: 0.983 70/100:  train_loss: 0.174, train_acc: 0.914 80/100:  train_loss: 0.159, train_acc: 0.925 90/100:  train_loss: 0.151, train_acc: 0.933 100/100:  train_loss: 0.140, train_acc: 0.940 ---------  train Loss: 0.1395 Acc: 0.9400 -----------
+10/20:  val_loss: 0.444, val_acc: 0.700 20/20:  val_loss: 0.310, val_acc: 0.800 ---------  val Loss: 0.3102 Acc: 0.8000 -----------
+
+Epoch 23/49
+----------
+10/100:  train_loss: 0.120, train_acc: 0.900 20/100:  train_loss: 0.182, train_acc: 0.850 30/100:  train_loss: 0.142, train_acc: 0.900 40/100:  train_loss: 0.153, train_acc: 0.875 50/100:  train_loss: 0.127, train_acc: 0.900 60/100:  train_loss: 0.127, train_acc: 0.917 70/100:  train_loss: 0.177, train_acc: 0.914 80/100:  train_loss: 0.165, train_acc: 0.925 90/100:  train_loss: 0.150, train_acc: 0.933 100/100:  train_loss: 0.138, train_acc: 0.940 ---------  train Loss: 0.1382 Acc: 0.9400 -----------
+10/20:  val_loss: 0.312, val_acc: 0.700 20/20:  val_loss: 0.172, val_acc: 0.850 ---------  val Loss: 0.1719 Acc: 0.8500 -----------
+
+Epoch 24/49
+----------
+10/100:  train_loss: 0.041, train_acc: 1.000 20/100:  train_loss: 0.053, train_acc: 1.000 30/100:  train_loss: 0.046, train_acc: 1.000 40/100:  train_loss: 0.049, train_acc: 1.000 50/100:  train_loss: 0.044, train_acc: 1.000 60/100:  train_loss: 0.060, train_acc: 0.983 70/100:  train_loss: 0.054, train_acc: 0.986 80/100:  train_loss: 0.065, train_acc: 0.975 90/100:  train_loss: 0.067, train_acc: 0.978 100/100:  train_loss: 0.064, train_acc: 0.980 ---------  train Loss: 0.0635 Acc: 0.9800 -----------
+10/20:  val_loss: 0.303, val_acc: 0.800 20/20:  val_loss: 0.729, val_acc: 0.800 ---------  val Loss: 0.7295 Acc: 0.8000 -----------
+
+Epoch 25/49
+----------
+10/100:  train_loss: 0.110, train_acc: 1.000 20/100:  train_loss: 0.068, train_acc: 1.000 30/100:  train_loss: 0.080, train_acc: 1.000 40/100:  train_loss: 0.076, train_acc: 1.000 50/100:  train_loss: 0.083, train_acc: 0.980 60/100:  train_loss: 0.085, train_acc: 0.967 70/100:  train_loss: 0.106, train_acc: 0.957 80/100:  train_loss: 0.102, train_acc: 0.963 90/100:  train_loss: 0.101, train_acc: 0.967 100/100:  train_loss: 0.123, train_acc: 0.950 ---------  train Loss: 0.1235 Acc: 0.9500 -----------
+10/20:  val_loss: 0.275, val_acc: 0.800 20/20:  val_loss: 0.427, val_acc: 0.800 ---------  val Loss: 0.4271 Acc: 0.8000 -----------
+
+Epoch 26/49
+----------
+10/100:  train_loss: 0.037, train_acc: 1.000 20/100:  train_loss: 0.026, train_acc: 1.000 30/100:  train_loss: 0.049, train_acc: 1.000 40/100:  train_loss: 0.084, train_acc: 0.975 50/100:  train_loss: 0.103, train_acc: 0.980 60/100:  train_loss: 0.103, train_acc: 0.983 70/100:  train_loss: 0.101, train_acc: 0.971 80/100:  train_loss: 0.100, train_acc: 0.975 90/100:  train_loss: 0.091, train_acc: 0.978 100/100:  train_loss: 0.087, train_acc: 0.980 ---------  train Loss: 0.0873 Acc: 0.9800 -----------
+10/20:  val_loss: 0.431, val_acc: 0.900 20/20:  val_loss: 0.384, val_acc: 0.850 ---------  val Loss: 0.3837 Acc: 0.8500 -----------
+
+Epoch 27/49
+----------
+10/100:  train_loss: 0.026, train_acc: 1.000 20/100:  train_loss: 0.022, train_acc: 1.000 30/100:  train_loss: 0.032, train_acc: 1.000 40/100:  train_loss: 0.051, train_acc: 0.975 50/100:  train_loss: 0.042, train_acc: 0.980 60/100:  train_loss: 0.039, train_acc: 0.983 70/100:  train_loss: 0.039, train_acc: 0.986 80/100:  train_loss: 0.040, train_acc: 0.988 90/100:  train_loss: 0.040, train_acc: 0.989 100/100:  train_loss: 0.037, train_acc: 0.990 ---------  train Loss: 0.0371 Acc: 0.9900 -----------
+10/20:  val_loss: 0.241, val_acc: 0.900 20/20:  val_loss: 0.399, val_acc: 0.900 ---------  val Loss: 0.3994 Acc: 0.9000 -----------
+
+Epoch 28/49
+----------
+10/100:  train_loss: 0.021, train_acc: 1.000 20/100:  train_loss: 0.081, train_acc: 0.950 30/100:  train_loss: 0.059, train_acc: 0.967 40/100:  train_loss: 0.049, train_acc: 0.975 50/100:  train_loss: 0.041, train_acc: 0.980 60/100:  train_loss: 0.041, train_acc: 0.983 70/100:  train_loss: 0.042, train_acc: 0.986 80/100:  train_loss: 0.038, train_acc: 0.988 90/100:  train_loss: 0.036, train_acc: 0.989 100/100:  train_loss: 0.048, train_acc: 0.990 ---------  train Loss: 0.0482 Acc: 0.9900 -----------
+10/20:  val_loss: 0.099, val_acc: 0.900 20/20:  val_loss: 0.180, val_acc: 0.900 ---------  val Loss: 0.1796 Acc: 0.9000 -----------
+
+Epoch 29/49
+----------
+10/100:  train_loss: 0.014, train_acc: 1.000 20/100:  train_loss: 0.094, train_acc: 0.950 30/100:  train_loss: 0.072, train_acc: 0.967 40/100:  train_loss: 0.066, train_acc: 0.975 50/100:  train_loss: 0.057, train_acc: 0.980 60/100:  train_loss: 0.061, train_acc: 0.983 70/100:  train_loss: 0.058, train_acc: 0.986 80/100:  train_loss: 0.055, train_acc: 0.988 90/100:  train_loss: 0.058, train_acc: 0.989 100/100:  train_loss: 0.053, train_acc: 0.990 ---------  train Loss: 0.0527 Acc: 0.9900 -----------
+10/20:  val_loss: 0.148, val_acc: 0.900 20/20:  val_loss: 0.233, val_acc: 0.850 ---------  val Loss: 0.2328 Acc: 0.8500 -----------
+
+Epoch 30/49
+----------
+10/100:  train_loss: 0.122, train_acc: 0.900 20/100:  train_loss: 0.071, train_acc: 0.950 30/100:  train_loss: 0.064, train_acc: 0.967 40/100:  train_loss: 0.061, train_acc: 0.975 50/100:  train_loss: 0.054, train_acc: 0.980 60/100:  train_loss: 0.056, train_acc: 0.983 70/100:  train_loss: 0.049, train_acc: 0.986 80/100:  train_loss: 0.044, train_acc: 0.988 90/100:  train_loss: 0.041, train_acc: 0.989 100/100:  train_loss: 0.038, train_acc: 0.990 ---------  train Loss: 0.0377 Acc: 0.9900 -----------
+10/20:  val_loss: 0.248, val_acc: 0.900 20/20:  val_loss: 0.273, val_acc: 0.900 ---------  val Loss: 0.2730 Acc: 0.9000 -----------
+
+Epoch 31/49
+----------
+10/100:  train_loss: 0.018, train_acc: 1.000 20/100:  train_loss: 0.013, train_acc: 1.000 30/100:  train_loss: 0.023, train_acc: 1.000 40/100:  train_loss: 0.050, train_acc: 0.975 50/100:  train_loss: 0.044, train_acc: 0.980 60/100:  train_loss: 0.057, train_acc: 0.983 70/100:  train_loss: 0.052, train_acc: 0.986 80/100:  train_loss: 0.049, train_acc: 0.988 90/100:  train_loss: 0.054, train_acc: 0.989 100/100:  train_loss: 0.050, train_acc: 0.990 ---------  train Loss: 0.0495 Acc: 0.9900 -----------
+10/20:  val_loss: 0.631, val_acc: 0.700 20/20:  val_loss: 0.326, val_acc: 0.850 ---------  val Loss: 0.3259 Acc: 0.8500 -----------
+
+Epoch 32/49
+----------
+10/100:  train_loss: 0.054, train_acc: 1.000 20/100:  train_loss: 0.030, train_acc: 1.000 30/100:  train_loss: 0.052, train_acc: 1.000 40/100:  train_loss: 0.042, train_acc: 1.000 50/100:  train_loss: 0.046, train_acc: 1.000 60/100:  train_loss: 0.040, train_acc: 1.000 70/100:  train_loss: 0.041, train_acc: 1.000 80/100:  train_loss: 0.075, train_acc: 0.975 90/100:  train_loss: 0.070, train_acc: 0.978 100/100:  train_loss: 0.065, train_acc: 0.980 ---------  train Loss: 0.0651 Acc: 0.9800 -----------
+10/20:  val_loss: 0.458, val_acc: 0.900 20/20:  val_loss: 0.393, val_acc: 0.900 ---------  val Loss: 0.3930 Acc: 0.9000 -----------
+
+Epoch 33/49
+----------
+10/100:  train_loss: 0.040, train_acc: 1.000 20/100:  train_loss: 0.031, train_acc: 1.000 30/100:  train_loss: 0.065, train_acc: 0.967 40/100:  train_loss: 0.074, train_acc: 0.975 50/100:  train_loss: 0.068, train_acc: 0.980 60/100:  train_loss: 0.070, train_acc: 0.983 70/100:  train_loss: 0.066, train_acc: 0.986 80/100:  train_loss: 0.061, train_acc: 0.988 90/100:  train_loss: 0.055, train_acc: 0.989 100/100:  train_loss: 0.051, train_acc: 0.990 ---------  train Loss: 0.0509 Acc: 0.9900 -----------
+10/20:  val_loss: 0.330, val_acc: 0.900 20/20:  val_loss: 0.384, val_acc: 0.900 ---------  val Loss: 0.3836 Acc: 0.9000 -----------
+
+Epoch 34/49
+----------
+10/100:  train_loss: 0.020, train_acc: 1.000 20/100:  train_loss: 0.050, train_acc: 1.000 30/100:  train_loss: 0.044, train_acc: 1.000 40/100:  train_loss: 0.041, train_acc: 1.000 50/100:  train_loss: 0.041, train_acc: 1.000 60/100:  train_loss: 0.035, train_acc: 1.000 70/100:  train_loss: 0.035, train_acc: 1.000 80/100:  train_loss: 0.038, train_acc: 1.000 90/100:  train_loss: 0.035, train_acc: 1.000 100/100:  train_loss: 0.047, train_acc: 0.990 ---------  train Loss: 0.0472 Acc: 0.9900 -----------
+10/20:  val_loss: 0.141, val_acc: 0.900 20/20:  val_loss: 0.391, val_acc: 0.800 ---------  val Loss: 0.3909 Acc: 0.8000 -----------
+
+Epoch 35/49
+----------
+10/100:  train_loss: 0.006, train_acc: 1.000 20/100:  train_loss: 0.016, train_acc: 1.000 30/100:  train_loss: 0.012, train_acc: 1.000 40/100:  train_loss: 0.012, train_acc: 1.000 50/100:  train_loss: 0.024, train_acc: 1.000 60/100:  train_loss: 0.021, train_acc: 1.000 70/100:  train_loss: 0.027, train_acc: 1.000 80/100:  train_loss: 0.027, train_acc: 1.000 90/100:  train_loss: 0.034, train_acc: 0.989 100/100:  train_loss: 0.033, train_acc: 0.990 ---------  train Loss: 0.0327 Acc: 0.9900 -----------
+10/20:  val_loss: 0.447, val_acc: 0.700 20/20:  val_loss: 0.373, val_acc: 0.750 ---------  val Loss: 0.3731 Acc: 0.7500 -----------
+
+Epoch 36/49
+----------
+10/100:  train_loss: 0.005, train_acc: 1.000 20/100:  train_loss: 0.011, train_acc: 1.000 30/100:  train_loss: 0.024, train_acc: 1.000 40/100:  train_loss: 0.020, train_acc: 1.000 50/100:  train_loss: 0.019, train_acc: 1.000 60/100:  train_loss: 0.018, train_acc: 1.000 70/100:  train_loss: 0.016, train_acc: 1.000 80/100:  train_loss: 0.015, train_acc: 1.000 90/100:  train_loss: 0.017, train_acc: 1.000 100/100:  train_loss: 0.027, train_acc: 0.990 ---------  train Loss: 0.0271 Acc: 0.9900 -----------
+10/20:  val_loss: 0.259, val_acc: 0.900 20/20:  val_loss: 0.243, val_acc: 0.850 ---------  val Loss: 0.2434 Acc: 0.8500 -----------
+
+Epoch 37/49
+----------
+10/100:  train_loss: 0.008, train_acc: 1.000 20/100:  train_loss: 0.020, train_acc: 1.000 30/100:  train_loss: 0.019, train_acc: 1.000 40/100:  train_loss: 0.019, train_acc: 1.000 50/100:  train_loss: 0.018, train_acc: 1.000 60/100:  train_loss: 0.016, train_acc: 1.000 70/100:  train_loss: 0.016, train_acc: 1.000 80/100:  train_loss: 0.016, train_acc: 1.000 90/100:  train_loss: 0.017, train_acc: 1.000 100/100:  train_loss: 0.016, train_acc: 1.000 ---------  train Loss: 0.0158 Acc: 1.0000 -----------
+10/20:  val_loss: 0.234, val_acc: 0.900 20/20:  val_loss: 0.219, val_acc: 0.900 ---------  val Loss: 0.2189 Acc: 0.9000 -----------
+
+Epoch 38/49
+----------
+10/100:  train_loss: 0.263, train_acc: 0.900 20/100:  train_loss: 0.137, train_acc: 0.950 30/100:  train_loss: 0.095, train_acc: 0.967 40/100:  train_loss: 0.081, train_acc: 0.975 50/100:  train_loss: 0.069, train_acc: 0.980 60/100:  train_loss: 0.077, train_acc: 0.983 70/100:  train_loss: 0.067, train_acc: 0.986 80/100:  train_loss: 0.065, train_acc: 0.988 90/100:  train_loss: 0.058, train_acc: 0.989 100/100:  train_loss: 0.053, train_acc: 0.990 ---------  train Loss: 0.0530 Acc: 0.9900 -----------
+10/20:  val_loss: 0.116, val_acc: 0.900 20/20:  val_loss: 0.533, val_acc: 0.800 ---------  val Loss: 0.5327 Acc: 0.8000 -----------
+
+Epoch 39/49
+----------
+10/100:  train_loss: 0.058, train_acc: 1.000 20/100:  train_loss: 0.050, train_acc: 1.000 30/100:  train_loss: 0.036, train_acc: 1.000 40/100:  train_loss: 0.068, train_acc: 0.975 50/100:  train_loss: 0.060, train_acc: 0.980 60/100:  train_loss: 0.057, train_acc: 0.983 70/100:  train_loss: 0.053, train_acc: 0.986 80/100:  train_loss: 0.049, train_acc: 0.988 90/100:  train_loss: 0.044, train_acc: 0.989 100/100:  train_loss: 0.040, train_acc: 0.990 ---------  train Loss: 0.0397 Acc: 0.9900 -----------
+10/20:  val_loss: 0.466, val_acc: 0.700 20/20:  val_loss: 0.426, val_acc: 0.750 ---------  val Loss: 0.4263 Acc: 0.7500 -----------
+
+Epoch 40/49
+----------
+10/100:  train_loss: 0.005, train_acc: 1.000 20/100:  train_loss: 0.049, train_acc: 1.000 30/100:  train_loss: 0.152, train_acc: 0.933 40/100:  train_loss: 0.134, train_acc: 0.950 50/100:  train_loss: 0.113, train_acc: 0.960 60/100:  train_loss: 0.100, train_acc: 0.967 70/100:  train_loss: 0.092, train_acc: 0.971 80/100:  train_loss: 0.082, train_acc: 0.975 90/100:  train_loss: 0.074, train_acc: 0.978 100/100:  train_loss: 0.067, train_acc: 0.980 ---------  train Loss: 0.0670 Acc: 0.9800 -----------
+10/20:  val_loss: 0.260, val_acc: 0.800 20/20:  val_loss: 0.412, val_acc: 0.750 ---------  val Loss: 0.4121 Acc: 0.7500 -----------
+
+Epoch 41/49
+----------
+10/100:  train_loss: 0.007, train_acc: 1.000 20/100:  train_loss: 0.025, train_acc: 1.000 30/100:  train_loss: 0.021, train_acc: 1.000 40/100:  train_loss: 0.027, train_acc: 1.000 50/100:  train_loss: 0.023, train_acc: 1.000 60/100:  train_loss: 0.021, train_acc: 1.000 70/100:  train_loss: 0.019, train_acc: 1.000 80/100:  train_loss: 0.018, train_acc: 1.000 90/100:  train_loss: 0.016, train_acc: 1.000 100/100:  train_loss: 0.015, train_acc: 1.000 ---------  train Loss: 0.0151 Acc: 1.0000 -----------
+10/20:  val_loss: 0.200, val_acc: 0.900 20/20:  val_loss: 0.411, val_acc: 0.800 ---------  val Loss: 0.4113 Acc: 0.8000 -----------
+
+Epoch 42/49
+----------
+10/100:  train_loss: 0.032, train_acc: 1.000 20/100:  train_loss: 0.019, train_acc: 1.000 30/100:  train_loss: 0.015, train_acc: 1.000 40/100:  train_loss: 0.082, train_acc: 0.975 50/100:  train_loss: 0.105, train_acc: 0.960 60/100:  train_loss: 0.092, train_acc: 0.967 70/100:  train_loss: 0.080, train_acc: 0.971 80/100:  train_loss: 0.074, train_acc: 0.975 90/100:  train_loss: 0.067, train_acc: 0.978 100/100:  train_loss: 0.065, train_acc: 0.980 ---------  train Loss: 0.0646 Acc: 0.9800 -----------
+10/20:  val_loss: 0.212, val_acc: 0.900 20/20:  val_loss: 0.230, val_acc: 0.900 ---------  val Loss: 0.2301 Acc: 0.9000 -----------
+
+Epoch 43/49
+----------
+10/100:  train_loss: 0.021, train_acc: 1.000 20/100:  train_loss: 0.014, train_acc: 1.000 30/100:  train_loss: 0.012, train_acc: 1.000 40/100:  train_loss: 0.013, train_acc: 1.000 50/100:  train_loss: 0.012, train_acc: 1.000 60/100:  train_loss: 0.012, train_acc: 1.000 70/100:  train_loss: 0.016, train_acc: 1.000 80/100:  train_loss: 0.018, train_acc: 1.000 90/100:  train_loss: 0.017, train_acc: 1.000 100/100:  train_loss: 0.016, train_acc: 1.000 ---------  train Loss: 0.0163 Acc: 1.0000 -----------
+10/20:  val_loss: 0.182, val_acc: 0.900 20/20:  val_loss: 0.159, val_acc: 0.900 ---------  val Loss: 0.1588 Acc: 0.9000 -----------
+
+Epoch 44/49
+----------
+10/100:  train_loss: 0.031, train_acc: 1.000 20/100:  train_loss: 0.031, train_acc: 1.000 30/100:  train_loss: 0.024, train_acc: 1.000 40/100:  train_loss: 0.019, train_acc: 1.000 50/100:  train_loss: 0.029, train_acc: 1.000 60/100:  train_loss: 0.027, train_acc: 1.000 70/100:  train_loss: 0.024, train_acc: 1.000 80/100:  train_loss: 0.021, train_acc: 1.000 90/100:  train_loss: 0.029, train_acc: 1.000 100/100:  train_loss: 0.026, train_acc: 1.000 ---------  train Loss: 0.0262 Acc: 1.0000 -----------
+10/20:  val_loss: 0.324, val_acc: 0.800 20/20:  val_loss: 0.172, val_acc: 0.900 ---------  val Loss: 0.1719 Acc: 0.9000 -----------
+
+Epoch 45/49
+----------
+10/100:  train_loss: 0.018, train_acc: 1.000 20/100:  train_loss: 0.010, train_acc: 1.000 30/100:  train_loss: 0.009, train_acc: 1.000 40/100:  train_loss: 0.009, train_acc: 1.000 50/100:  train_loss: 0.012, train_acc: 1.000 60/100:  train_loss: 0.011, train_acc: 1.000 70/100:  train_loss: 0.011, train_acc: 1.000 80/100:  train_loss: 0.011, train_acc: 1.000 90/100:  train_loss: 0.011, train_acc: 1.000 100/100:  train_loss: 0.010, train_acc: 1.000 ---------  train Loss: 0.0103 Acc: 1.0000 -----------
+10/20:  val_loss: 0.211, val_acc: 0.800 20/20:  val_loss: 0.175, val_acc: 0.850 ---------  val Loss: 0.1748 Acc: 0.8500 -----------
+
+Epoch 46/49
+----------
+10/100:  train_loss: 0.168, train_acc: 0.900 20/100:  train_loss: 0.096, train_acc: 0.950 30/100:  train_loss: 0.070, train_acc: 0.967 40/100:  train_loss: 0.054, train_acc: 0.975 50/100:  train_loss: 0.044, train_acc: 0.980 60/100:  train_loss: 0.037, train_acc: 0.983 70/100:  train_loss: 0.033, train_acc: 0.986 80/100:  train_loss: 0.029, train_acc: 0.988 90/100:  train_loss: 0.028, train_acc: 0.989 100/100:  train_loss: 0.031, train_acc: 0.990 ---------  train Loss: 0.0309 Acc: 0.9900 -----------
+10/20:  val_loss: 0.046, val_acc: 1.000 20/20:  val_loss: 0.289, val_acc: 0.900 ---------  val Loss: 0.2886 Acc: 0.9000 -----------
+
+Epoch 47/49
+----------
+10/100:  train_loss: 0.032, train_acc: 1.000 20/100:  train_loss: 0.023, train_acc: 1.000 30/100:  train_loss: 0.023, train_acc: 1.000 40/100:  train_loss: 0.034, train_acc: 1.000 50/100:  train_loss: 0.029, train_acc: 1.000 60/100:  train_loss: 0.024, train_acc: 1.000 70/100:  train_loss: 0.026, train_acc: 1.000 80/100:  train_loss: 0.029, train_acc: 1.000 90/100:  train_loss: 0.027, train_acc: 1.000 100/100:  train_loss: 0.037, train_acc: 1.000 ---------  train Loss: 0.0373 Acc: 1.0000 -----------
+10/20:  val_loss: 0.379, val_acc: 0.900 20/20:  val_loss: 0.332, val_acc: 0.900 ---------  val Loss: 0.3319 Acc: 0.9000 -----------
+
+Epoch 48/49
+----------
+10/100:  train_loss: 0.003, train_acc: 1.000 20/100:  train_loss: 0.003, train_acc: 1.000 30/100:  train_loss: 0.003, train_acc: 1.000 40/100:  train_loss: 0.004, train_acc: 1.000 50/100:  train_loss: 0.004, train_acc: 1.000 60/100:  train_loss: 0.005, train_acc: 1.000 70/100:  train_loss: 0.007, train_acc: 1.000 80/100:  train_loss: 0.006, train_acc: 1.000 90/100:  train_loss: 0.006, train_acc: 1.000 100/100:  train_loss: 0.006, train_acc: 1.000 ---------  train Loss: 0.0060 Acc: 1.0000 -----------
+10/20:  val_loss: 0.583, val_acc: 0.800 20/20:  val_loss: 0.326, val_acc: 0.900 ---------  val Loss: 0.3264 Acc: 0.9000 -----------
+
+Epoch 49/49
+----------
+10/100:  train_loss: 0.004, train_acc: 1.000 20/100:  train_loss: 0.047, train_acc: 1.000 30/100:  train_loss: 0.041, train_acc: 1.000 40/100:  train_loss: 0.032, train_acc: 1.000 50/100:  train_loss: 0.030, train_acc: 1.000 60/100:  train_loss: 0.026, train_acc: 1.000 70/100:  train_loss: 0.023, train_acc: 1.000 80/100:  train_loss: 0.021, train_acc: 1.000 90/100:  train_loss: 0.019, train_acc: 1.000 100/100:  train_loss: 0.020, train_acc: 1.000 ---------  train Loss: 0.0196 Acc: 1.0000 -----------
+10/20:  val_loss: 0.209, val_acc: 0.900 20/20:  val_loss: 0.250, val_acc: 0.850 ---------  val Loss: 0.2503 Acc: 0.8500 -----------
+
+Training complete in 28m 14s
+Best val Acc: 0.950000
