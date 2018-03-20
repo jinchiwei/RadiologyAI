@@ -65,6 +65,13 @@ model.train(False)
 running_corrects = 0
 total = len(radio_val.sample_paths)
 print(total)
+
+def do_gpu(x):
+  return x.cuda() if use_gpu else x
+
+if use_gpu:
+  model = model.cuda()
+
 for data in radio_data_loader:
   inputs, labels = data
   
@@ -72,12 +79,8 @@ for data in radio_data_loader:
   # plt.show()
 
   original = inputs
-  if use_gpu:
-    inputs = Variable(inputs.cuda()).float()
-    labels = Variable(labels.cuda()).long()
-  else:
-    inputs = Variable(inputs).float()
-    labels = Variable(labels).long()
+  inputs = Variable(do_gpu(inputs)).float()
+  labels = Variable(do_gpu(labels)).long()
   
   # forward
   outputs = model(inputs)
