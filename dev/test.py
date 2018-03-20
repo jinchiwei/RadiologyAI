@@ -25,23 +25,29 @@ import time
 
 from models import ResNet18_pretrained, GoogLeNet_pretrained
 from dataset import THADataset
+import argparse
 
-
+parser = argparse.ArgumentParser()
+parser.add_argument('-n', '--network',
+    choices=['googlenet', 'resnet18'], default='googlenet',
+    help='Choose which neural network to use')
+args = parser.parse_args()
 
 result_classes = {
   0:'no_THA',
   1:'yes_THA'
 }
 
-
-
 ############ testing ############
 use_gpu = torch.cuda.is_available()
-n_classes = len(list(result_classes.keys()))
-# model = ResNet18_pretrained(n_classes,freeze=False)
-model = GoogLeNet_pretrained(n_classes,freeze=False)
-# load_file = 'weights_resnet_nonorm/res18_weights/005_0.900.pkl'
-load_file = 'weights_google_nonorm/res18_weights/009_0.950.pkl'
+n_classes = len(result_classes)
+if args.network == 'resnet18':
+    model = ResNet18_pretrained(n_classes, freeze=False)
+    load_file = 'weights_resnet_nonorm/res18_weights/005_0.900.pkl'
+elif args.network == 'googlenet':
+    model = GoogLeNet_pretrained(n_classes, freeze=False)
+    load_file = 'weights_google_nonorm/res18_weights/009_0.950.pkl'
+
 batch_size=10
 model.load_state_dict(torch.load(os.path.join('./', load_file)))
 
@@ -74,14 +80,14 @@ if use_gpu:
 
 for data in radio_data_loader:
   inputs, labels = data
-  
-  # plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
-  # plt.show()
+
+  plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
+  plt.show()
 
   original = inputs
   inputs = Variable(do_gpu(inputs)).float()
   labels = Variable(do_gpu(labels)).long()
-  
+
   # forward
   outputs = model(inputs)
   _, preds = torch.max(outputs.data, 1)
