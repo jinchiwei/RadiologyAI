@@ -29,7 +29,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
-    choices=['googlenet', 'resnet18'], default='googlenet',
+    choices=['googlenet', 'resnet18'], default='resnet18',
     help='Choose which neural network to use')
 args = parser.parse_args()
 
@@ -53,10 +53,10 @@ model.load_state_dict(torch.load(os.path.join('./', load_file)))
 
 val_data_transform = transforms.Compose([
     transforms.ToPILImage(),
-    # transforms.Resize((256, 256)),
-    transforms.Resize((32, 32)),
-    # transforms.CenterCrop(224),
-    transforms.CenterCrop(32),
+    transforms.Resize((256, 256)),
+    # transforms.Resize((32, 32)),
+    transforms.CenterCrop(224),
+    # transforms.CenterCrop(32),
     transforms.ToTensor(),
     # transforms.Normalize(mean=[0.485, 0.456, 0.406],
     #                      std=[0.229, 0.224, 0.225]),
@@ -81,8 +81,8 @@ if use_gpu:
 for data in radio_data_loader:
   inputs, labels = data
 
-  plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
-  plt.show()
+  # plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
+  # plt.show()
 
   original = inputs
   inputs = Variable(do_gpu(inputs)).float()
