@@ -66,4 +66,8 @@ class THADataset(Dataset):
             img_path = os.path.join(yes_THA_dir, sample)
             self.sample_paths.append((img_path, 1))
 
-            
+
+
+if __name__ == '__main__':
+  dataset = THADataset('val')
+  print(dataset.sample_paths)

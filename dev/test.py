@@ -23,13 +23,13 @@ from skimage import io
 from PIL import Image
 import time
 
-from models import ResNet18_pretrained, GoogLeNet_pretrained
+from models import ResNet18_pretrained, inception_v3_pretrained
 from dataset import THADataset
 import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
-    choices=['googlenet', 'resnet18'], default='resnet18',
+    choices=['resnet18', 'inception_v3'], default='resnet18',
     help='Choose which neural network to use')
 args = parser.parse_args()
 
@@ -43,26 +43,35 @@ use_gpu = torch.cuda.is_available()
 n_classes = len(result_classes)
 if args.network == 'resnet18':
     model = ResNet18_pretrained(n_classes, freeze=False)
-    load_file = 'weights_resnet_nonorm/res18_weights/005_0.900.pkl'
-elif args.network == 'googlenet':
-    model = GoogLeNet_pretrained(n_classes, freeze=False)
-    load_file = 'weights_google_nonorm/res18_weights/009_0.950.pkl'
+    load_file = 'weights_resnet_nonorm/resnet18_weights/005_0.900.pkl'
+    val_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.CenterCrop(224),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+elif args.network == 'inception_v3':
+    model = inception_v3_pretrained(n_classes, freeze=False)
+    load_file = 'weights_inception_nonorm/inception_v3_weights/006_1.000.pkl'
+    val_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((300, 300)),
+      transforms.CenterCrop(299),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+
+
 
 batch_size=10
 model.load_state_dict(torch.load(os.path.join('./', load_file)))
-
-val_data_transform = transforms.Compose([
-    transforms.ToPILImage(),
-    transforms.Resize((256, 256)),
-    # transforms.Resize((32, 32)),
-    transforms.CenterCrop(224),
-    # transforms.CenterCrop(32),
-    transforms.ToTensor(),
-    # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-    #                      std=[0.229, 0.224, 0.225]),
-    # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-    #                      std=[0.21329397, 0.215493, 0.21677108]),
-  ])
 radio_val = THADataset(train='test', transform=val_data_transform)
 radio_data_loader = DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
 
@@ -78,11 +87,22 @@ def do_gpu(x):
 if use_gpu:
   model = model.cuda()
 
+
+
+
+TP = 0 # pred true, label true
+TN = 0 # pred false, label false
+FP = 0 # pred true, label false
+FN = 0 # pred false, label true
+
 for data in radio_data_loader:
   inputs, labels = data
 
-  # plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
-  # plt.show()
+  """
+  # show first images of the batch
+  plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
+  plt.show()
+  """
 
   original = inputs
   inputs = Variable(do_gpu(inputs)).float()
@@ -95,7 +115,16 @@ for data in radio_data_loader:
   # statistics
   running_corrects += torch.sum(preds == labels.data)
 
+  # ROC curve analysis
+  preds = preds.float().cpu().numpy()
+  labels = labels.data.float().cpu().numpy()  
+  TP += np.sum(np.logical_and(preds == 1.0, labels == 1.0))
+  TN += np.sum(np.logical_and(preds == 0.0, labels == 0.0))
+  FP += np.sum(np.logical_and(preds == 1.0, labels == 0.0))
+  FN += np.sum(np.logical_and(preds == 0.0, labels == 1.0))
+
   """
+  # show incorrectly classified images
   for idx in range(len(original)):
     if (preds != labels.data)[idx]:
       plt.imshow(np.transpose(original.numpy()[idx], (1,2,0)))
@@ -106,4 +135,18 @@ for data in radio_data_loader:
 print('---------  correct: {:03d} -----------'.format(running_corrects))
 print('---------  total: {:03d} -----------'.format(total))
 print('---------  accuracy: {:.4f} -----------'.format(running_corrects/total))
+
+
+sensitivity  = TP / (TP + FN)
+specificity  = TN / (TN + FP)
+pos_like_ratio = sensitivity / (1 - specificity)
+neg_like_ratio = (1 - sensitivity) / specificity
+pos_pred_val = TP / (TP + FP)
+neg_pred_val = TN / (TN + FN)
+
+print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f'
+        % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val))
+
+
+
 
