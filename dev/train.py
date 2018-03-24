@@ -91,6 +91,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
     train_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((256, 256)),
+      transforms.RandomRotation((-5, +5)),
       transforms.RandomCrop(224),
       transforms.RandomHorizontalFlip(),
       transforms.ToTensor(),
@@ -113,6 +114,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
     train_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((300, 300)),
+      transforms.RandomRotation((-5, +5)),
       transforms.RandomCrop(299),
       transforms.RandomHorizontalFlip(),
       transforms.ToTensor(),
