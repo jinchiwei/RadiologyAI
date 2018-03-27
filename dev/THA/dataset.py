@@ -1,6 +1,7 @@
 from torch.utils.data.dataset import Dataset
 import os, sys
 from skimage import io
+# import cv2
 import numpy as np
 
 ############ dataloader ############
@@ -32,8 +33,15 @@ class THADataset(Dataset):
 
   def __getitem__(self, idx):
     img_path,label = self.sample_paths[idx]
+    
+    # img_path = 'dataset/100_20_30/yes_THA_test/256_2012_1431_Fig2_HTML.gif'
+    # x = np.array(cv2.imread(img_path, 1))
+    # print(img_path)
+    # if len(x.shape) is 0:
+    
     x = io.imread(img_path) # x = io.imread(img_path)[:,:,:3]
     x = np.resize(x, (x.shape[0], x.shape[1], 3))
+
     if self.transform:
       x = self.transform(x)
     
@@ -69,5 +77,8 @@ class THADataset(Dataset):
 
 
 if __name__ == '__main__':
-  dataset = THADataset('val')
-  print(dataset.sample_paths)
+  dataset = THADataset('test')
+  dataset.__getitem__(0)
+  # for path in dataset.sample_paths:
+    # print(path)
+  
