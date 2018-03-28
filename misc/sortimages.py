@@ -16,8 +16,11 @@ dir2 = input("New AP directory: ")
 
 AP = open(filelistAP, "r")
 for filename in AP:
-	filename_noline = filename.replace("\n", "")
-	os.rename(dir1 + "/" + filename_noline, dir2 + "/" + filename_noline)
+	try:
+		filename_noline = filename.replace("\n", "")
+		os.rename(dir1 + "/" + filename_noline, dir2 + "/" + filename_noline)
+	except FileNotFoundError:
+		continue
 
 AP.close()
 
@@ -26,7 +29,10 @@ dir2 = input("New PA directory: ")
 
 PA = open(filelistPA, "r")
 for filename in PA:
-	filename_noline = filename.replace("\n", "")
-	os.rename(dir1 + "/" + filename_noline, dir2 + "/" + filename_noline)
+	try:
+		filename_noline = filename.replace("\n", "")
+		os.rename(dir1 + "/" + filename_noline, dir2 + "/" + filename_noline)
+	except FileNotFoundError:
+		continue
 
 PA.close()
