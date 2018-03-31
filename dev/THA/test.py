@@ -43,7 +43,7 @@ use_gpu = torch.cuda.is_available()
 n_classes = len(result_classes)
 if args.network == 'resnet18':
     model = ResNet18_pretrained(n_classes, freeze=False)
-    load_file = 'weights_resnet_nonorm/resnet18_weights/005_0.900.pkl'
+    load_file = 'weights_resnet/resnet18_weights/007_0.950.pkl'
     val_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((256, 256)),
@@ -56,7 +56,7 @@ if args.network == 'resnet18':
     ])
 elif args.network == 'inception_v3':
     model = inception_v3_pretrained(n_classes, freeze=False)
-    load_file = 'weights_inception_nonorm/inception_v3_weights/006_1.000.pkl'
+    load_file = 'weights_inception/inception_v3_weights/001_1.000.pkl'
     val_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((300, 300)),

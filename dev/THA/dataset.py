@@ -1,8 +1,8 @@
 from torch.utils.data.dataset import Dataset
 import os, sys
-from skimage import io
-# import cv2
+from skimage import io, color
 import numpy as np
+# from matplotlib import pyplot as plt
 
 ############ dataloader ############
 dataset_dir = 'dataset/100_20_30'
@@ -34,13 +34,14 @@ class THADataset(Dataset):
   def __getitem__(self, idx):
     img_path,label = self.sample_paths[idx]
     
-    # img_path = 'dataset/100_20_30/yes_THA_test/256_2012_1431_Fig2_HTML.gif'
-    # x = np.array(cv2.imread(img_path, 1))
-    # print(img_path)
-    # if len(x.shape) is 0:
+    x = io.imread(img_path)
     
-    x = io.imread(img_path) # x = io.imread(img_path)[:,:,:3]
-    x = np.resize(x, (x.shape[0], x.shape[1], 3))
+    # in order to make everything in RGB (x, y, 3) dimension
+    shape = x.shape
+    if len(shape) == 3 and shape[2] > 3: # for cases (x, y, 4)
+      x = x[:,:,:3]
+    elif len(shape) == 2: # for cases (x, y)
+      x = color.gray2rgb(x)
 
     if self.transform:
       x = self.transform(x)
@@ -77,8 +78,12 @@ class THADataset(Dataset):
 
 
 if __name__ == '__main__':
-  dataset = THADataset('test')
-  dataset.__getitem__(0)
-  # for path in dataset.sample_paths:
-    # print(path)
+  print('Test codes are commented out')
+  # dataset = THADataset('test')
+  # dataset = THADataset('val')
+  # dataset = THADataset('train')
+  # for idx in range(dataset.__len__()):
+  #   print(idx)
+  #   dataset.__getitem__(idx)
+  
   

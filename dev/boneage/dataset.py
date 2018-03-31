@@ -1,10 +1,9 @@
 from torch.utils.data.dataset import Dataset
 import os, sys
-from skimage import io
+from skimage import io, color
 import numpy as np
 import csv
 from matplotlib import pyplot as plt
-import cv2
 
 ############ dataloader ############
 dataset_dir = 'rsna-bone-age/'
@@ -35,7 +34,16 @@ class bone_dataset(Dataset):
     img_path, age, label = self.sample_paths[idx]
     # x = io.imread(img_path) # x = io.imread(img_path)[:,:,:3]
     # x = np.resize(x, (x.shape[0], x.shape[1], 3))
-    x = cv2.imread(img_path, 1)
+    
+    x = io.imread(img_path)
+    
+    # in order to make everything in RGB (x, y, 3) dimension
+    shape = x.shape
+    if len(shape) == 3 and shape[2] > 3: # for cases (x, y, 4)
+      x = x[:,:,:3]
+    elif len(shape) == 2: # for cases (x, y)
+      x = color.gray2rgb(x)
+
     if self.transform:
       x = self.transform(x)
     return (x, age, label)
@@ -55,5 +63,20 @@ class bone_dataset(Dataset):
 
 
 if __name__ == '__main__':
-  dataset = bone_dataset('test')
-  print(dataset.sample_paths)
+  print('Test codes are commented out')
+  
+  # dataset = bone_dataset('test')
+  # # print(dataset.__getitem__(0)[0].shape)
+  # # print(dataset.__getitem__(0)[1])
+  # # print(dataset.__getitem__(0)[2])
+
+  # # dataset = bone_dataset('val')
+  # # dataset = bone_dataset('train')
+  # for idx in range(dataset.__len__()):
+  #   print(idx)
+  #   # dataset.__getitem__(idx)
+  #   print(dataset.__getitem__(idx)[0].shape)
+  #   print(dataset.__getitem__(idx)[1])
+  #   print(dataset.__getitem__(idx)[2])
+
+
