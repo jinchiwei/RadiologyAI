@@ -1,87 +1,108 @@
 import os, sys
-from skimage import io, color
+from skimage import io, color, transform
 import numpy as np
 # import cv2
-# from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt
 
-############ dataloader ############
 dataset_dir = 'dataset/100_20_30_aug'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
                 'no_val' : 'no_THA_val',
-                'yes_val' : 'yes_THA_val',
-                'no_test' : 'no_THA_test',
-                'yes_test' : 'yes_THA_test'}
+                'yes_val' : 'yes_THA_val'
+              }
+                # 'no_test' : 'no_THA_test',
+                # 'yes_test' : 'yes_THA_test'
 
-for key, val in directories:
-	print(key, val)
 
-class THADataset(Dataset):
-  def __init__(self, train, transform=None):
-    """
-    Args:
-        transform (callable, optional): Optional transform to be applied on a sample.
-    """
-    self.transform = transform
-    self.sample_paths = []
-    self._init(train)
 
-  def __len__(self):
-    return len(self.sample_paths)
+def read_image(img_path):
+  x = io.imread(img_path)
+  img_name = os.path.splitext(img_path)[0]
+  extension = os.path.splitext(img_path)[1]
+  return x, img_name, extension
 
-  def __getitem__(self, idx):
-    img_path,label = self.sample_paths[idx]
-    
-    x = io.imread(img_path)
-    
-    # in order to make everything in RGB (x, y, 3) dimension
-    shape = x.shape
-    if len(shape) == 3 and shape[2] > 3: # for cases (x, y, 4)
-      x = x[:,:,:3]
-    elif len(shape) == 2: # for cases (x, y)
-      x = color.gray2rgb(x)
 
-    if self.transform:
-      x = self.transform(x)
-    
-    return (x,label)
 
-  def _init(self, train):
-    no_THA_dir = ''
-    yes_THA_dir = ''
-    if train is 'train':
-      no_THA_dir = os.path.join(dataset_dir, directories['no_train'])
-      yes_THA_dir = os.path.join(dataset_dir, directories['yes_train'])
-    elif train is 'val':
-      no_THA_dir = os.path.join(dataset_dir, directories['no_val'])
-      yes_THA_dir = os.path.join(dataset_dir, directories['yes_val'])
-    else: # train is 'test'
-      no_THA_dir = os.path.join(dataset_dir, directories['no_test'])
-      yes_THA_dir = os.path.join(dataset_dir, directories['yes_test'])
+def save_image(x, new_img_path, extension):
+  # plt.imshow(x)
+  # plt.show()
+  # print(new_img_path)
+  # print(extension)
+  if extension == '':
+    extension = '.jpg'
+  new_img_path = new_img_path + extension
+  print(new_img_path)
+  io.imsave(new_img_path, x)
+  
+  
 
-    
-    # NO  
-    samples = os.listdir(no_THA_dir)
-    for sample in samples:
-        if not sample.startswith('.'): # avoid .DS_Store
-            img_path = os.path.join(no_THA_dir, sample)
-            self.sample_paths.append((img_path,0))
-    # YES
-    samples = os.listdir(yes_THA_dir)
-    for sample in samples:
-        if not sample.startswith('.'): # avoid .DS_Store
-            img_path = os.path.join(yes_THA_dir, sample)
-            self.sample_paths.append((img_path, 1))
+
+def rotate_image(img_path, degree):
+  x, img_name, extension = read_image(img_path)
+  x = transform.rotate(x, degree, resize=True)
+  new_img_path = img_name + '_rotate_' + str(degree)
+  save_image(x, new_img_path, extension)
+  
+
+
+def affine_image(img_path, iteration, rotate=False):
+  x, img_name, extension = read_image(img_path)
+
+  # original configuration from 
+  # https://www.programcreek.com/python/example/96400/skimage.transform.AffineTransform
+
+  # rotation = np.random.random_integers(0, 360)
+  # translation = (np.random.random_integers(-20, 20), np.random.random_integers(-20, 20))
+  # scale = (np.random.uniform(1/1.2, 1.2), np.random.uniform(1/1.2, 1.2))
+  # shear = np.random.random_integers(-10, 10)
+
+  # tf_augment = transform.AffineTransform(scale=scale, rotation=np.deg2rad(rotation), translation=translation, shear=np.deg2rad(shear))
+  # x = transform.warp(x, tf_augment, order=1, preserve_range=True, mode='symmetric')
+  
+  translation = (np.random.random_integers(-20, 20), np.random.random_integers(-20, 20))
+  scale = (np.random.uniform(1/1.2, 1.2), np.random.uniform(1/1.2, 1.2))
+  shear = np.random.random_integers(-10, 10)
+
+  rotation = 0
+  if rotate:
+    rotation = np.random.random_integers(-15, +15)
+
+  tf_augment = transform.AffineTransform(scale=scale, rotation=np.deg2rad(rotation), translation=translation, shear=np.deg2rad(shear))
+  x = transform.warp(x, tf_augment)
+  new_img_path = img_name + '_affine_' + str(iteration) + '_' + str(rotate)
+
+  save_image(x, new_img_path, extension)
+
+
+
+def amplify_image(img_path):
+  for angle in range(30, 331, 30):
+    rotate_image(img_path, angle)
+  for iteration in range(1, 21):
+    affine_image(img_path, iteration, rotate=False)
+    affine_image(img_path, iteration, rotate=True)
+
+
+
+def process_images():
+  for key in directories:
+    img_folder = os.path.join(dataset_dir, directories[key])
+    images = os.listdir(img_folder)
+    for image in images:
+      if not image.startswith('.'): # avoid .DS_Store
+        img_path = os.path.join(img_folder, image)
+        amplify_image(img_path)
 
 
 
 if __name__ == '__main__':
-  print('Test codes are commented out')
-  # dataset = THADataset('test')
-  # dataset = THADataset('val')
-  # dataset = THADataset('train')
-  # for idx in range(dataset.__len__()):
-  #   print(idx)
-  #   dataset.__getitem__(idx)
-  
-  
+  process_images()
+  # for key in directories:
+  #   img_folder = os.path.join(dataset_dir, directories[key])
+  #   images = os.listdir(img_folder)
+  #   for image in images:
+  #     if not image.startswith('.'): # avoid .DS_Store
+  #       img_path = os.path.join(img_folder, image)
+  #       amplify_image(img_path)
+  #       break;
+  #   break;
