@@ -24,7 +24,7 @@ from PIL import Image
 import time
 
 from models import ResNet18_pretrained, inception_v3_pretrained
-from dataset import THADataset
+from dataset import bone_dataset
 import argparse
 
 parser = argparse.ArgumentParser()
