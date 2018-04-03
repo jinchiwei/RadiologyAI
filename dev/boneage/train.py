@@ -23,20 +23,18 @@ from PIL import Image
 import time
 
 from models import ResNet18_pretrained, inception_v3_pretrained
-from dataset import THADataset
+from dataset import bone_dataset
 import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
-    choices=['resnet18', 'inception_v3'], default='resnet18',
+    choices=['resnet18'], default='resnet18',
     help='Choose which neural network to use')
 args = parser.parse_args()
 
-
-
 result_classes = {
-  0:'no_THA',
-  1:'yes_THA'
+  0:'female',
+  1:'male'
 }
 
 
@@ -75,9 +73,9 @@ def main():
     model = model.cuda()
     criterion = criterion.cuda()
   sys.stdout.flush()
-
-  optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=L2_weight_decay)
-  # optimizer = torch.optim.SGD(model.fc.parameters(), lr=lr, momentum=momentum, weight_decay=L2_weight_decay)
+  
+  # optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=L2_weight_decay)
+  optimizer = torch.optim.SGD(model.fc.parameters(), lr=lr, momentum=momentum, weight_decay=L2_weight_decay)
   # optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=L2_weight_decay)
   # optimizer = torch.optim.Adam(model.fc.parameters(),lr=lr,weight_decay=L2_weight_decay)
   # optimizer = torch.optim.Adam(model.classifier.parameters(), lr=lr, weight_decay=L2_weight_decay)
@@ -95,20 +93,12 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
       transforms.RandomCrop(224),
       transforms.RandomHorizontalFlip(),
       transforms.ToTensor(),
-      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-      #                      std=[0.229, 0.224, 0.225]),
-      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-      #                      std=[0.21329397, 0.215493, 0.21677108]),
     ])
     val_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((256, 256)),
       transforms.CenterCrop(224),
       transforms.ToTensor(),
-      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-      #                      std=[0.229, 0.224, 0.225]),
-      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-      #                      std=[0.21329397, 0.215493, 0.21677108]),
     ])
   elif args.network == 'inception_v3':
     train_data_transform = transforms.Compose([
@@ -118,24 +108,16 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
       transforms.RandomCrop(299),
       transforms.RandomHorizontalFlip(),
       transforms.ToTensor(),
-      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-      #                      std=[0.229, 0.224, 0.225]),
-      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-      #                      std=[0.21329397, 0.215493, 0.21677108]),
     ])
     val_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((300, 300)),
       transforms.CenterCrop(299),
       transforms.ToTensor(),
-      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-      #                      std=[0.229, 0.224, 0.225]),
-      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-      #                      std=[0.21329397, 0.215493, 0.21677108]),
     ])
   
-  radio_train = THADataset(train='train', transform=train_data_transform)
-  radio_val = THADataset(train='val', transform=val_data_transform)
+  radio_train = bone_dataset(phase='train', transform=train_data_transform)
+  radio_val = bone_dataset(phase='val', transform=val_data_transform)
 
   dataloaders = {
     'train': DataLoader(radio_train, batch_size=batch_size, shuffle=True, num_workers=2),
@@ -174,12 +156,14 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
       
       for data in dataloaders[phase]:
         # get the inputs
-        inputs, labels = data
+        inputs, ages, labels = data
         if use_gpu:
           inputs = Variable(inputs.cuda()).float()
+          ages = Variable(ages.cuda()).float()
           labels = Variable(labels.cuda()).long()
         else:
           inputs = Variable(inputs).float()
+          ages = Variable(ages).float()
           labels = Variable(labels).long()
         
         # increment the count
@@ -189,7 +173,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
         optimizer.zero_grad()
 
         # forward
-        outputs = model(inputs)
+        outputs = model(inputs, ages)
 
         # for nets that have multiple outputs such as inception
         if isinstance(outputs, tuple):
@@ -198,7 +182,6 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
         else:
           _, preds = torch.max(outputs.data, 1)
           loss = criterion(outputs, labels)
-
 
         # backward + optimize only if in training phase
         if phase == 'train':

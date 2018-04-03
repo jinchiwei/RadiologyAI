@@ -1,3 +1,4 @@
+import torch
 from torch.utils.data.dataset import Dataset
 import os, sys
 from skimage import io, color
@@ -46,7 +47,11 @@ class bone_dataset(Dataset):
 
     if self.transform:
       x = self.transform(x)
-    return (x, age, label)
+    
+    age = age/228.0
+    age = torch.FloatTensor([age])
+
+    return (x.float(), age, label)
 
   def _init(self, phase):
     image_dir = os.path.join(dataset_dir, images)

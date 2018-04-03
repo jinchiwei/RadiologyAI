@@ -29,14 +29,16 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
-    choices=['resnet18', 'inception_v3'], default='resnet18',
+    choices=['resnet18'], default='resnet18',
     help='Choose which neural network to use')
 args = parser.parse_args()
 
 result_classes = {
-  0:'no_THA',
-  1:'yes_THA'
+  0:'female',
+  1:'male'
 }
+
+
 
 ############ testing ############
 use_gpu = torch.cuda.is_available()
@@ -49,10 +51,6 @@ if args.network == 'resnet18':
       transforms.Resize((256, 256)),
       transforms.CenterCrop(224),
       transforms.ToTensor(),
-      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-      #                      std=[0.229, 0.224, 0.225]),
-      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-      #                      std=[0.21329397, 0.215493, 0.21677108]),
     ])
 elif args.network == 'inception_v3':
     model = inception_v3_pretrained(n_classes, freeze=False)
@@ -62,17 +60,13 @@ elif args.network == 'inception_v3':
       transforms.Resize((300, 300)),
       transforms.CenterCrop(299),
       transforms.ToTensor(),
-      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-      #                      std=[0.229, 0.224, 0.225]),
-      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-      #                      std=[0.21329397, 0.215493, 0.21677108]),
     ])
 
 
 
 batch_size=10
 model.load_state_dict(torch.load(os.path.join('./', load_file)))
-radio_val = THADataset(train='test', transform=val_data_transform)
+radio_val = bone_dataset(phase='test', transform=val_data_transform)
 radio_data_loader = DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
 
 model.train(False)
@@ -89,27 +83,27 @@ if use_gpu:
 
 
 
-
 TP = 0 # pred true, label true
 TN = 0 # pred false, label false
 FP = 0 # pred true, label false
 FN = 0 # pred false, label true
 
 for data in radio_data_loader:
-  inputs, labels = data
+  inputs, ages, labels = data
 
   """
   # show first images of the batch
   plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
   plt.show()
   """
-
-  original = inputs
+  # original = inputs
+  
   inputs = Variable(do_gpu(inputs)).float()
+  ages = Variable(do_gpu(ages)).float()
   labels = Variable(do_gpu(labels)).long()
 
   # forward
-  outputs = model(inputs)
+  outputs = model(inputs, ages)
   _, preds = torch.max(outputs.data, 1)
 
   # statistics
