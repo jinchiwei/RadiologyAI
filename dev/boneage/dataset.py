@@ -33,11 +33,8 @@ class bone_dataset(Dataset):
 
   def __getitem__(self, idx):
     img_path, age, label = self.sample_paths[idx]
-    # x = io.imread(img_path) # x = io.imread(img_path)[:,:,:3]
-    # x = np.resize(x, (x.shape[0], x.shape[1], 3))
     
     x = io.imread(img_path)
-    
     # in order to make everything in RGB (x, y, 3) dimension
     shape = x.shape
     if len(shape) == 3 and shape[2] > 3: # for cases (x, y, 4)
@@ -48,7 +45,7 @@ class bone_dataset(Dataset):
     if self.transform:
       x = self.transform(x)
     
-    age = age/228.0
+    age = float(age) / 228.0 # normalize so that we have age := age / max_age, thus 0 <= age <= 1
     age = torch.FloatTensor([age])
 
     return (x.float(), age, label)
