@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import argparse
 import matplotlib
+matplotlib.use('Agg') # Added for display errors
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -118,7 +119,7 @@ for data in radio_data_loader:
   
   if use_gpu:
     y_score.append(local_y_score.data.cpu().numpy())
-    y_true.append(labels.data.numpy())
+    y_true.append(labels.data.cpu().numpy())
   else:
     y_score.append(local_y_score.data.numpy())
     y_true.append(labels.data.numpy())
