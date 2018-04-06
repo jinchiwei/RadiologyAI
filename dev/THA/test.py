@@ -58,7 +58,7 @@ if args.network == 'resnet18':
     ])
 elif args.network == 'inception_v3':
     model = inception_v3_pretrained(n_classes, freeze=False)
-    load_file = 'weights_inception/inception_v3_weights/001_1.000.pkl'
+    load_file = 'weights_inception/inception_v3_weights/005_0.900.pkl'
     val_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((300, 300)),
@@ -130,12 +130,12 @@ for data in radio_data_loader:
   running_corrects += torch.sum(preds == labels.data)
 
   # ROC curve analysis
-  # preds = preds.float().cpu().numpy()
-  # labels = labels.data.float().cpu().numpy()  
-  # TP += np.sum(np.logical_and(preds == 1.0, labels == 1.0))
-  # TN += np.sum(np.logical_and(preds == 0.0, labels == 0.0))
-  # FP += np.sum(np.logical_and(preds == 1.0, labels == 0.0))
-  # FN += np.sum(np.logical_and(preds == 0.0, labels == 1.0))
+  preds = preds.float().cpu().numpy()
+  labels = labels.data.float().cpu().numpy()  
+  TP += np.sum(np.logical_and(preds == 1.0, labels == 1.0))
+  TN += np.sum(np.logical_and(preds == 0.0, labels == 0.0))
+  FP += np.sum(np.logical_and(preds == 1.0, labels == 0.0))
+  FN += np.sum(np.logical_and(preds == 0.0, labels == 1.0))
 
   """
   # show incorrectly classified images
@@ -158,8 +158,8 @@ y_true = y_true2
 
 y_score = np.concatenate(y_score, 0)
 
-print(y_true)
-print(y_score)
+# print(y_true)
+# print(y_score)
 
 # Compute ROC curve and ROC area for each class
 fpr = dict()
@@ -191,20 +191,15 @@ plt.savefig('roc.png')
 auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
 print('auc_score: ', auc_score)
 
+sensitivity  = TP / (TP + FN)
+specificity  = TN / (TN + FP)
+pos_like_ratio = sensitivity / (1 - specificity)
+neg_like_ratio = (1 - sensitivity) / specificity
+pos_pred_val = TP / (TP + FP)
+neg_pred_val = TN / (TN + FN)
 
-
-# print(y_score)
-# roc_shit = metrics.roc_curve(y_true, y_score)
-
-# sensitivity  = TP / (TP + FN)
-# specificity  = TN / (TN + FP)
-# pos_like_ratio = sensitivity / (1 - specificity)
-# neg_like_ratio = (1 - sensitivity) / specificity
-# pos_pred_val = TP / (TP + FP)
-# neg_pred_val = TN / (TN + FN)
-
-# print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f'
-#         % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val))
+print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f\nTP: %f\nTN: %f\nFP: %f\nFN: %f'
+        % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val, TP, TN, FP, FN))
 
 
 
