@@ -115,9 +115,13 @@ for data in radio_data_loader:
   outputs = model(inputs)
   
   local_y_score = F.softmax(outputs, 1)
-
-  y_score.append(local_y_score.data.numpy())
-  y_true.append(labels.data.numpy())
+  
+  if use_gpu:
+    y_score.append(local_y_score.data.cpu().numpy())
+    y_true.append(labels.data.numpy())
+  else:
+    y_score.append(local_y_score.data.numpy())
+    y_true.append(labels.data.numpy())
 
   _, preds = torch.max(outputs.data, 1)
 
