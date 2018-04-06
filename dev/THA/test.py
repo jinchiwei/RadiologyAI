@@ -185,7 +185,7 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver operating characteristic example')
 plt.legend(loc="lower right")
-plt.savefig('image.png')
+plt.savefig('roc.png')
 # plt.show()
 
 auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
