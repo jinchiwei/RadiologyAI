@@ -32,7 +32,7 @@ def save_image(x, new_img_path, extension):
     extension = '.jpg'
   new_img_path = new_img_path + extension
   print(new_img_path)
-  io.imsave(new_img_path, x)
+  io.imsave(new_img_path, np.uint8(x))
   
   
 
