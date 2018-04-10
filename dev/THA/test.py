@@ -3,6 +3,7 @@ from __future__ import print_function
 
 import argparse
 import matplotlib
+matplotlib.use('Agg') # Added for display errors
 from matplotlib import pyplot as plt
 import numpy as np
 
@@ -57,7 +58,7 @@ if args.network == 'resnet18':
     ])
 elif args.network == 'inception_v3':
     model = inception_v3_pretrained(n_classes, freeze=False)
-    load_file = 'weights_inception/inception_v3_weights/001_1.000.pkl'
+    load_file = 'weights_inception/inception_v3_weights/005_0.900.pkl'
     val_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((300, 300)),
@@ -115,9 +116,19 @@ for data in radio_data_loader:
   outputs = model(inputs)
   
   local_y_score = F.softmax(outputs, 1)
+<<<<<<< HEAD
 
   y_score.append(local_y_score.data.numpy())
   y_true.append(labels.data.numpy())
+=======
+  
+  if use_gpu:
+    y_score.append(local_y_score.data.cpu().numpy())
+    y_true.append(labels.data.cpu().numpy())
+  else:
+    y_score.append(local_y_score.data.numpy())
+    y_true.append(labels.data.numpy())
+>>>>>>> d8c3059bcf0ee904a9f2e9501c6b6eb2fc84a03b
 
   _, preds = torch.max(outputs.data, 1)
 
@@ -153,8 +164,13 @@ y_true = y_true2
 
 y_score = np.concatenate(y_score, 0)
 
+<<<<<<< HEAD
 print(y_true)
 print(y_score)
+=======
+# print(y_true)
+# print(y_score)
+>>>>>>> d8c3059bcf0ee904a9f2e9501c6b6eb2fc84a03b
 
 # Compute ROC curve and ROC area for each class
 fpr = dict()
@@ -180,12 +196,18 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver operating characteristic example')
 plt.legend(loc="lower right")
+<<<<<<< HEAD
 plt.savefig('image.png')
 plt.show()
+=======
+plt.savefig('roc.png')
+# plt.show()
+>>>>>>> d8c3059bcf0ee904a9f2e9501c6b6eb2fc84a03b
 
 auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
 print('auc_score: ', auc_score)
 
+<<<<<<< HEAD
 
 
 # print(y_score)
@@ -200,6 +222,17 @@ print('auc_score: ', auc_score)
 
 # print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f'
 #         % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val))
+=======
+sensitivity  = TP / (TP + FN)
+specificity  = TN / (TN + FP)
+pos_like_ratio = sensitivity / (1 - specificity)
+neg_like_ratio = (1 - sensitivity) / specificity
+pos_pred_val = TP / (TP + FP)
+neg_pred_val = TN / (TN + FN)
+
+print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f\nTP: %f\nTN: %f\nFP: %f\nFN: %f'
+        % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val, TP, TN, FP, FN))
+>>>>>>> d8c3059bcf0ee904a9f2e9501c6b6eb2fc84a03b
 
 
 

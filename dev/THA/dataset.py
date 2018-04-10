@@ -43,9 +43,15 @@ class THADataset(Dataset):
     elif len(shape) == 2: # for cases (x, y)
       x = color.gray2rgb(x)
 
+<<<<<<< HEAD
     # in order to make sure we have images NOT in uint16
     if x.dtype == np.uint16:
       x = x.astype(np.uint8)
+=======
+    # in order to make sure we have images in uint8
+    if x.dtype != np.uint8:
+      x = x.astype(np.uint8)   
+>>>>>>> d8c3059bcf0ee904a9f2e9501c6b6eb2fc84a03b
 
     if self.transform:
       x = self.transform(x)

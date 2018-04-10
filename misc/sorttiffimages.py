@@ -18,7 +18,7 @@ AP = open(filelistAP, "r")
 for filename in AP:
 	try:
 		filename_noline = filename.replace("\n", "")
-		os.rename(dir1 + "/" + filename_noline, dir2 + "/" + filename_noline)
+		os.rename(dir1 + "/" + filename_noline + ".tiff", dir2 + "/" + filename_noline + ".tiff")
 	except FileNotFoundError:
 		continue
 
