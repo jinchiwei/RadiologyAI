@@ -26,6 +26,7 @@ import time
 from models import ResNet18_pretrained, inception_v3_pretrained
 from dataset import THADataset
 import argparse
+from sklearn import metrics
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
@@ -43,7 +44,7 @@ use_gpu = torch.cuda.is_available()
 n_classes = len(result_classes)
 if args.network == 'resnet18':
     model = ResNet18_pretrained(n_classes, freeze=False)
-    load_file = 'weights_resnet/resnet18_weights/007_0.950.pkl'
+    load_file = 'weights_resnet_nonorm/resnet18_weights/005_0.900.pkl'
     val_data_transform = transforms.Compose([
       transforms.ToPILImage(),
       transforms.Resize((256, 256)),
@@ -95,6 +96,8 @@ TN = 0 # pred false, label false
 FP = 0 # pred true, label false
 FN = 0 # pred false, label true
 
+y_true = []
+y_score = []
 for data in radio_data_loader:
   inputs, labels = data
 
@@ -110,6 +113,12 @@ for data in radio_data_loader:
 
   # forward
   outputs = model(inputs)
+  
+  local_y_score = F.softmax(outputs, 1)
+
+  y_score.append(local_y_score.data.numpy())
+  y_true.append(labels.data.numpy())
+
   _, preds = torch.max(outputs.data, 1)
 
   # statistics
@@ -136,16 +145,61 @@ print('---------  correct: {:03d} -----------'.format(running_corrects))
 print('---------  total: {:03d} -----------'.format(total))
 print('---------  accuracy: {:.4f} -----------'.format(running_corrects/total))
 
+y_true = np.concatenate(y_true, 0)
+y_true2 = np.zeros((y_true.shape[0], 2))
+for column in range(y_true2.shape[1]):
+  y_true2[:, column] = (y_true == column)
+y_true = y_true2
 
-sensitivity  = TP / (TP + FN)
-specificity  = TN / (TN + FP)
-pos_like_ratio = sensitivity / (1 - specificity)
-neg_like_ratio = (1 - sensitivity) / specificity
-pos_pred_val = TP / (TP + FP)
-neg_pred_val = TN / (TN + FN)
+y_score = np.concatenate(y_score, 0)
 
-print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f'
-        % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val))
+print(y_true)
+print(y_score)
+
+# Compute ROC curve and ROC area for each class
+fpr = dict()
+tpr = dict()
+roc_auc = dict()
+for i in range(n_classes):
+    fpr[i], tpr[i], _ = metrics.roc_curve(y_true[:, i], y_score[:, i])
+    roc_auc[i] = metrics.auc(fpr[i], tpr[i])
+
+# # Compute micro-average ROC curve and ROC area
+# fpr["micro"], tpr["micro"], _ = metrics.roc_curve(y_test.ravel(), y_score.ravel())
+# roc_auc["micro"] = metrics.auc(fpr["micro"], tpr["micro"])
+
+plt.figure()
+lw = 2
+plt.plot(fpr[1], tpr[1], color='darkorange',
+         lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[1])
+plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver operating characteristic example')
+plt.legend(loc="lower right")
+plt.savefig('image.png')
+plt.show()
+
+auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
+print('auc_score: ', auc_score)
+
+
+
+# print(y_score)
+# roc_shit = metrics.roc_curve(y_true, y_score)
+
+# sensitivity  = TP / (TP + FN)
+# specificity  = TN / (TN + FP)
+# pos_like_ratio = sensitivity / (1 - specificity)
+# neg_like_ratio = (1 - sensitivity) / specificity
+# pos_pred_val = TP / (TP + FP)
+# neg_pred_val = TN / (TN + FN)
+
+# print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f'
+#         % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val))
 
 
 

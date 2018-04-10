@@ -32,6 +32,8 @@ def save_image(x, new_img_path, extension):
     extension = '.jpg'
   new_img_path = new_img_path + extension
   print(new_img_path)
+  if x.dtype == np.uint16:
+    x = x.astype(np.uint8)
   io.imsave(new_img_path, x)
   
   
@@ -78,7 +80,7 @@ def affine_image(img_path, iteration, rotate=False):
 def amplify_image(img_path):
   for angle in range(30, 331, 30):
     rotate_image(img_path, angle)
-  for iteration in range(1, 21):
+  for iteration in range(1, 2):
     affine_image(img_path, iteration, rotate=False)
     affine_image(img_path, iteration, rotate=True)
 

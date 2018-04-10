@@ -5,7 +5,7 @@ import numpy as np
 # from matplotlib import pyplot as plt
 
 ############ dataloader ############
-dataset_dir = 'dataset/100_20_30'
+dataset_dir = 'dataset/100_20_30_aug'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
                 'no_val' : 'no_THA_val',
@@ -42,6 +42,10 @@ class THADataset(Dataset):
       x = x[:,:,:3]
     elif len(shape) == 2: # for cases (x, y)
       x = color.gray2rgb(x)
+
+    # in order to make sure we have images NOT in uint16
+    if x.dtype == np.uint16:
+      x = x.astype(np.uint8)
 
     if self.transform:
       x = self.transform(x)
@@ -83,7 +87,14 @@ if __name__ == '__main__':
   # dataset = THADataset('val')
   # dataset = THADataset('train')
   # for idx in range(dataset.__len__()):
-  #   print(idx)
-  #   dataset.__getitem__(idx)
+    # print(idx)
+    # x, label = dataset.__getitem__(idx)
+    # print(type(x))
+    # print(x.dtype)
+    # if x.dtype == np.uint16:
+    #   print(x.dtype)
+    #   x = x.astype(np.uint8)
+    #   print(x.dtype)
+    # print(x)
   
   
