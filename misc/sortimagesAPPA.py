@@ -7,9 +7,9 @@
 
 import os
 
-filelistAP = input("List of grouped files: ")
+filelistAP = input("List of AP files: ")
 dir1 = input("Source directory: ")
-dir2 = input("New group directory: ")
+dir2 = input("New AP directory: ")
 
 # for i in range(6):
 # 	AP_line = AP.read()
@@ -24,15 +24,15 @@ for filename in AP:
 
 AP.close()
 
-# filelistPA = input("List of PA files: ")
-# dir2 = input("New PA directory: ")
+filelistPA = input("List of PA files: ")
+dir2 = input("New PA directory: ")
 
-#PA = open(filelistPA, "r")
-#for filename in PA:
-#	try:
-#		filename_noline = filename.replace("\n", "")
-#		os.rename(dir1 + "/" + filename_noline, dir2 + "/" + filename_noline)
-#	except FileNotFoundError:
-#		continue
-#
-#PA.close()
+PA = open(filelistPA, "r")
+for filename in PA:
+	try:
+		filename_noline = filename.replace("\n", "")
+		os.rename(dir1 + "/" + filename_noline, dir2 + "/" + filename_noline)
+	except FileNotFoundError:
+		continue
+
+PA.close()
