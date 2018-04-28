@@ -15,7 +15,7 @@ from models import ResNet18_pretrained
 
 
 
-# input images
+### input images
 dataset_dir = 'dataset/100_20_30'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
@@ -23,12 +23,19 @@ directories = {'no_train' : 'no_THA_train',
                 'yes_val' : 'yes_THA_val',
                 'no_test' : 'no_THA_test',
                 'yes_test' : 'yes_THA_test'}
-# result classes
+
+###  result classes
 result_classes = {
   0:'no_THA',
   1:'yes_THA'
 }
 
+###  output directories
+output_dir = 'CAM'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+###  choose model
 model_id = 2 # we are using ResNet18
 if model_id == 1:
     net = models.squeezenet1_1(pretrained=True)
@@ -41,19 +48,16 @@ elif model_id == 2:
 elif model_id == 3:
     net = models.densenet161(pretrained=True)
     finalconv_name = 'features'
-
 net.eval()
 
-# hook the feature extractor
-features_blobs = []
-def hook_feature(module, input, output):
-    features_blobs.append(output.data.cpu().numpy())
+### preprocessing
+preprocess = transforms.Compose([
+  transforms.Resize((256, 256)),
+  transforms.CenterCrop(224),
+  transforms.ToTensor(),
+])
 
-net._modules.get(finalconv_name).register_forward_hook(hook_feature)
 
-# get the softmax weight
-params = list(net.parameters())
-weight_softmax = np.squeeze(params[-2].data.numpy())
 
 def returnCAM(feature_conv, weight_softmax, class_idx):
     # generate the class activation maps upsample to 256x256
@@ -70,15 +74,8 @@ def returnCAM(feature_conv, weight_softmax, class_idx):
     return output_cam
 
 
-preprocess = transforms.Compose([
-  transforms.Resize((256, 256)),
-  transforms.CenterCrop(224),
-  transforms.ToTensor(),
-])
 
-output_dir = 'CAM'
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
+
 
 ################ REPETITION
 image_url = os.path.join(dataset_dir, directories['yes_train'])
@@ -87,6 +84,18 @@ for sample in samples:
   
   if sample.startswith('.'): # avoid .DS_Store
     continue
+  
+  # hook the feature extractor
+  features_blobs = []
+  def hook_feature(module, input, output):
+      features_blobs.append(output.data.cpu().numpy())
+
+  net._modules.get(finalconv_name).register_forward_hook(hook_feature)
+
+  # get the softmax weight
+  params = list(net.parameters())
+  weight_softmax = np.squeeze(params[-2].data.numpy())
+  
   img_name = os.path.splitext(sample)[0]
 
   image_file = os.path.join(image_url, sample)
