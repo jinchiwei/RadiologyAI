@@ -47,41 +47,33 @@ def main():
     n_classes = len(result_classes)
     if args.network == 'resnet18':
         model = ResNet18_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_resnet_nonorm/resnet18_weights')
-        weightsnum = len(weightslist) - 1
-        for weightfile in range(weightsnum):
-            load_file = 'weights_resnet_nonorm/resnet18_weights/' + weightslist[weightfile]
-            val_data_transform = transforms.Compose([
-              transforms.ToPILImage(),
-              transforms.Resize((256, 256)),
-              transforms.CenterCrop(224),
-              transforms.ToTensor(),
-              # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-              #                      std=[0.229, 0.224, 0.225]),
-              # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-              #                      std=[0.21329397, 0.215493, 0.21677108]),
-            ])
-            test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
+        load_file = 'weights_resnet_nonorm/resnet18_weights/005_0.900.pkl'
+        val_data_transform = transforms.Compose([
+          transforms.ToPILImage(),
+          transforms.Resize((256, 256)),
+          transforms.CenterCrop(224),
+          transforms.ToTensor(),
+          # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+          #                      std=[0.229, 0.224, 0.225]),
+          # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+          #                      std=[0.21329397, 0.215493, 0.21677108]),
+        ])
     elif args.network == 'inception_v3':
         model = inception_v3_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_inception/inception_v3_weights')
-        weightsnum = len(weightslist) - 1
-        for weightfile in range(weightsnum):
-            load_file = 'weights_inception/inception_v3_weights' + weightslist[weightfile]
-            val_data_transform = transforms.Compose([
-              transforms.ToPILImage(),
-              transforms.Resize((300, 300)),
-              transforms.CenterCrop(299),
-              transforms.ToTensor(),
-              # transforms.Normalize(mean=[0.485, 0.456, 0.406],
-              #                      std=[0.229, 0.224, 0.225]),
-              # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
-              #                      std=[0.21329397, 0.215493, 0.21677108]),
-            ])
-            test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
+        load_file = 'weights_inception/inception_v3_weights/005_0.900.pkl'
+        val_data_transform = transforms.Compose([
+          transforms.ToPILImage(),
+          transforms.Resize((300, 300)),
+          transforms.CenterCrop(299),
+          transforms.ToTensor(),
+          # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+          #                      std=[0.229, 0.224, 0.225]),
+          # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+          #                      std=[0.21329397, 0.215493, 0.21677108]),
+        ])
 
 
-def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
+
     batch_size=10
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
     radio_val = THADataset(train='test', transform=val_data_transform)
@@ -196,7 +188,7 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     plt.title('Receiver operating characteristic example')
     plt.legend(loc="lower right")
     plt.show()
-    plt.savefig('roc' + str(weightfile) + '.png')
+    plt.savefig('roc.png')
     # plt.show()
 
     auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
