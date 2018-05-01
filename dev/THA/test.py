@@ -191,8 +191,8 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
 
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
+    plt.xlabel('1-Specificity')
+    plt.ylabel('Sensitivity')
     plt.title('Receiver operating characteristic example')
     plt.legend(loc="lower right")
     plt.show()
