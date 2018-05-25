@@ -51,7 +51,7 @@ def AlexNet_pretrained(n_classes, freeze=True):
 
 
 def SqueezeNet_pretrained(n_classes, freeze=True):
-  model = models.__dict__['squeezenet1_0'](pretrained=True)
+  model = models.__dict__['squeezenet1_1'](pretrained=True)
   if freeze:
     for param in model.parameters():
       param.requires_grad = True
