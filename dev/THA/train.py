@@ -22,13 +22,13 @@ from skimage import io
 from PIL import Image
 import time
 
-from models import ResNet18_pretrained, inception_v3_pretrained
+from models import ResNet18_pretrained, inception_v3_pretrained, AlexNet_pretrained, SqueezeNet_pretrained, VGGNet_pretrained, DenseNet_pretrained
 from dataset import THADataset
 import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
-    choices=['resnet18', 'inception_v3'], default='resnet18',
+    choices=['resnet18', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet18',
     help='Choose which neural network to use')
 args = parser.parse_args()
 
@@ -66,7 +66,18 @@ def main():
   elif args.network == 'inception_v3':
     model = inception_v3_pretrained(n_classes,freeze=False)
     print('model is inception_v3')
-    
+  elif args.network == 'alexnet':
+    model = AlexNet_pretrained(n_classes,freeze=False)
+    print('model is alexnet')
+  elif args.network == 'squeezenet':
+    model = SqueezeNet_pretrained(n_classes,freeze=False)
+    print('model is squeezenet')
+  elif args.network == 'vggnet':
+    model = VGGNet_pretrained(n_classes,freeze=False)
+    print('model is vggnet')
+  elif args.network == 'densenet':
+    model = DenseNet_pretrained(n_classes,freeze=False)
+    print('model is densenet')
   ## LOSS PARAMETER
   criterion = nn.CrossEntropyLoss(weight=class_weights) # equivalent to NLL Loss + softmax = cross entropy
   print("Starting!")
@@ -133,7 +144,99 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
       # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
       #                      std=[0.21329397, 0.215493, 0.21677108]),
     ])
-  
+  elif args.network == 'alexnet':
+    train_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.RandomRotation((-5, +5)),
+      transforms.RandomCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+    val_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.CenterCrop(224),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+  elif args.network == 'squeezenet':
+    train_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.RandomRotation((-5, +5)),
+      transforms.RandomCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+    val_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.CenterCrop(224),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+  elif args.network == 'vggnet':
+    train_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.RandomRotation((-5, +5)),
+      transforms.RandomCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+    val_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.CenterCrop(224),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+  elif args.network == 'densenet':
+    train_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.RandomRotation((-5, +5)),
+      transforms.RandomCrop(224),
+      transforms.RandomHorizontalFlip(),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+    val_data_transform = transforms.Compose([
+      transforms.ToPILImage(),
+      transforms.Resize((256, 256)),
+      transforms.CenterCrop(224),
+      transforms.ToTensor(),
+      # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+      #                      std=[0.229, 0.224, 0.225]),
+      # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+      #                      std=[0.21329397, 0.215493, 0.21677108]),
+    ])
+
   radio_train = THADataset(train='train', transform=train_data_transform)
   radio_val = THADataset(train='val', transform=val_data_transform)
 
@@ -141,6 +244,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
     'train': DataLoader(radio_train, batch_size=batch_size, shuffle=True, num_workers=2),
     'val': DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
   }
+
 
   ##### TRAIN ROUTINE
   since = time.time()
