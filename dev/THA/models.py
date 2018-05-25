@@ -62,6 +62,7 @@ def SqueezeNet_pretrained(n_classes, freeze=True):
   return model
 
 
+
 def VGGNet_pretrained(n_classes, freeze=True):
   model = models.__dict__['vgg'](pretrained=True)
   if freeze:
