@@ -24,7 +24,7 @@ from skimage import io
 from PIL import Image
 import time
 
-from models import ResNet18_pretrained, inception_v3_pretrained
+from models import ResNet18_pretrained, inception_v3_pretrained, AlexNet_pretrained, SqueezeNet_pretrained, VGGNet_pretrained, DenseNet_pretrained
 from dataset import THADataset
 import argparse
 from sklearn import metrics
@@ -33,7 +33,7 @@ from sklearn import metrics
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--network',
-        choices=['resnet18', 'inception_v3'], default='resnet18',
+        choices=['resnet18', 'inception_v3, alexnet, squeezenet, vggnet, densenet'], default='resnet18',
         help='Choose which neural network to use')
     args = parser.parse_args()
 
@@ -72,6 +72,74 @@ def main():
               transforms.ToPILImage(),
               transforms.Resize((300, 300)),
               transforms.CenterCrop(299),
+              transforms.ToTensor(),
+              # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+              #                      std=[0.229, 0.224, 0.225]),
+              # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+              #                      std=[0.21329397, 0.215493, 0.21677108]),
+            ])
+            test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
+    elif args.network == 'alexnet':
+        model = ResNet18_pretrained(n_classes, freeze=False)
+        weightslist = os.listdir('weights_alexnet/alexnet_weights')
+        weightsnum = len(weightslist) - 1
+        for weightfile in range(weightsnum):
+            load_file = 'weights_alexnet/alexnet_weights/' + weightslist[weightfile]
+            val_data_transform = transforms.Compose([
+              transforms.ToPILImage(),
+              transforms.Resize((256, 256)),
+              transforms.CenterCrop(224),
+              transforms.ToTensor(),
+              # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+              #                      std=[0.229, 0.224, 0.225]),
+              # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+              #                      std=[0.21329397, 0.215493, 0.21677108]),
+            ])
+            test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
+    elif args.network == 'squeezenet':
+        model = ResNet18_pretrained(n_classes, freeze=False)
+        weightslist = os.listdir('weights_alexnet/alexnet_weights')
+        weightsnum = len(weightslist) - 1
+        for weightfile in range(weightsnum):
+            load_file = 'weights_alexnet/alexnet_weights/' + weightslist[weightfile]
+            val_data_transform = transforms.Compose([
+              transforms.ToPILImage(),
+              transforms.Resize((256, 256)),
+              transforms.CenterCrop(224),
+              transforms.ToTensor(),
+              # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+              #                      std=[0.229, 0.224, 0.225]),
+              # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+              #                      std=[0.21329397, 0.215493, 0.21677108]),
+            ])
+            test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
+    elif args.network == 'vggnet':
+        model = ResNet18_pretrained(n_classes, freeze=False)
+        weightslist = os.listdir('weights_alexnet/alexnet_weights')
+        weightsnum = len(weightslist) - 1
+        for weightfile in range(weightsnum):
+            load_file = 'weights_alexnet/alexnet_weights/' + weightslist[weightfile]
+            val_data_transform = transforms.Compose([
+              transforms.ToPILImage(),
+              transforms.Resize((256, 256)),
+              transforms.CenterCrop(224),
+              transforms.ToTensor(),
+              # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+              #                      std=[0.229, 0.224, 0.225]),
+              # transforms.Normalize(mean=[0.4059296, 0.40955055, 0.412535],
+              #                      std=[0.21329397, 0.215493, 0.21677108]),
+            ])
+            test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
+    elif args.network == 'densenet':
+        model = ResNet18_pretrained(n_classes, freeze=False)
+        weightslist = os.listdir('weights_alexnet/alexnet_weights')
+        weightsnum = len(weightslist) - 1
+        for weightfile in range(weightsnum):
+            load_file = 'weights_alexnet/alexnet_weights/' + weightslist[weightfile]
+            val_data_transform = transforms.Compose([
+              transforms.ToPILImage(),
+              transforms.Resize((256, 256)),
+              transforms.CenterCrop(224),
               transforms.ToTensor(),
               # transforms.Normalize(mean=[0.485, 0.456, 0.406],
               #                      std=[0.229, 0.224, 0.225]),
