@@ -41,6 +41,9 @@ def AlexNet_pretrained(n_classes, freeze=True):
   model = models.__dict__['alexnet'](pretrained=True)
   if freeze:
     for param in model.parameters():
+      param.requires_grad = False
+  else:
+    for param in model.parameters():
       param.requires_grad = True
 
   ## change the last 1000-fc to n_classes
@@ -53,6 +56,9 @@ def AlexNet_pretrained(n_classes, freeze=True):
 def SqueezeNet_pretrained(n_classes, freeze=True):
   model = models.__dict__['squeezenet1_1'](pretrained=True)
   if freeze:
+    for param in model.parameters():
+      param.requires_grad = False
+  else:
     for param in model.parameters():
       param.requires_grad = True
 
@@ -67,6 +73,9 @@ def VGGNet_pretrained(n_classes, freeze=True):
   model = models.__dict__['vgg16'](pretrained=True)
   if freeze:
     for param in model.parameters():
+      param.requires_grad = False
+  else:
+    for param in model.parameters():
       param.requires_grad = True
 
   ## change the last 1000-fc to n_classes
@@ -79,6 +88,9 @@ def VGGNet_pretrained(n_classes, freeze=True):
 def DenseNet_pretrained(n_classes, freeze=True):
   model = models.__dict__['densenet161'](pretrained=True)
   if freeze:
+    for param in model.parameters():
+      param.requires_grad = False
+  else:
     for param in model.parameters():
       param.requires_grad = True
 
