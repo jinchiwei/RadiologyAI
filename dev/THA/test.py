@@ -33,7 +33,7 @@ from sklearn import metrics
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--network',
-        choices=['resnet18', 'inception_v3, alexnet, squeezenet, vggnet, densenet'], default='resnet18',
+        choices=['resnet18', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet18',
         help='Choose which neural network to use')
     args = parser.parse_args()
 
@@ -53,8 +53,8 @@ def main():
             load_file = 'weights_resnet18/resnet18_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
-              transforms.Resize((256, 256)),
-              transforms.CenterCrop(224),
+              #transforms.Resize((256, 256)),
+              #transforms.CenterCrop(224),
               transforms.ToTensor(),
               # transforms.Normalize(mean=[0.485, 0.456, 0.406],
               #                      std=[0.229, 0.224, 0.225]),
@@ -80,7 +80,7 @@ def main():
             ])
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'alexnet':
-        model = ResNet18_pretrained(n_classes, freeze=False)
+        model = AlexNet_pretrained(n_classes, freeze=False)
         weightslist = os.listdir('weights_alexnet/alexnet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
@@ -97,11 +97,11 @@ def main():
             ])
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'squeezenet':
-        model = ResNet18_pretrained(n_classes, freeze=False)
+        model = SqueezeNet_pretrained(n_classes, freeze=False)
         weightslist = os.listdir('weights_squeezenet/squeezenet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
-            load_file = 'weights_squeeze/squeezenet_weights/' + weightslist[weightfile]
+            load_file = 'weights_squeezenet/squeezenet_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((256, 256)),
@@ -114,7 +114,7 @@ def main():
             ])
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'vggnet':
-        model = ResNet18_pretrained(n_classes, freeze=False)
+        model = VGGNet_pretrained(n_classes, freeze=False)
         weightslist = os.listdir('weights_vggnet/vggnet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
@@ -131,7 +131,7 @@ def main():
             ])
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'densenet':
-        model = ResNet18_pretrained(n_classes, freeze=False)
+        model = DenseNet_pretrained(n_classes, freeze=False)
         weightslist = os.listdir('weights_densenet/densenet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
@@ -226,7 +226,7 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
 
     print('---------  correct: {:03d} -----------'.format(running_corrects))
     print('---------  total: {:03d} -----------'.format(total))
-    print('---------  accuracy: {:.4f} -----------'.format(running_corrects/total))
+    print('---------  accuracy: {:.4f} -----------'.format(float(running_corrects)/total))
 
     y_true = np.concatenate(y_true, 0)
     y_true2 = np.zeros((y_true.shape[0], 2))

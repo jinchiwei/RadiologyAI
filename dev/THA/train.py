@@ -218,7 +218,8 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
           optimizer.step()
 
         # statistics
-        running_loss += loss.data[0]
+        # print(loss.data.item()) Debugging loss.data[0]
+        running_loss += loss.data.item() # Added tensor.item to convert to Python scalar
         running_corrects += torch.sum(preds == labels.data)
 
         print('{:d}/{:d}:  {:s}_loss: {:.3f}, {:s}_acc: {:.3f} \r'.format(batch_size*count,
@@ -231,7 +232,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
         sys.stdout.flush()
 
       epoch_loss = running_loss / dataset_size
-      epoch_acc = running_corrects / (count * batch_size)
+      epoch_acc = float(running_corrects) / (count * batch_size)
 
       print('---------  {} Loss: {:.4f} Acc: {:.4f} -----------'.format(phase, epoch_loss, epoch_acc))
 

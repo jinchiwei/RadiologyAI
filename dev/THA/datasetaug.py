@@ -5,7 +5,7 @@ import numpy as np
 # from matplotlib import pyplot as plt
 
 ############ dataloader ############
-dataset_dir = 'dataset/100_20_30'
+dataset_dir = 'dataset/100_20_30_aug'
 directories = {'no_train' : 'no_THA_train',
                 'yes_train' : 'yes_THA_train',
                 'no_val' : 'no_THA_val',
