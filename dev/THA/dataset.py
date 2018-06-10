@@ -5,20 +5,27 @@ import numpy as np
 # from matplotlib import pyplot as plt
 
 ############ dataloader ############
-dataset_dir = 'dataset/100_20_30'
-directories = {
-    'train_0' : 'no_THA_train',
-    'train_1' : 'yes_THA_train',
-    'val_0' : 'no_THA_val',
-    'val_1' : 'yes_THA_val',
-    'test_0' : 'no_THA_test',
-    'test_1' : 'yes_THA_test'
-}
-
 result_classes = {
     0 : 'no_THA',
     1 : 'yes_THA'
 }
+
+dataset_dir = 'dataset/100_20_30'
+directories = {}
+for class_num in result_classes:
+    directories['train_' + str(class_num)] = result_classes[class_num] + '_train'
+    directories['val_' + str(class_num)] = result_classes[class_num] + '_val'
+    directories['test_' + str(class_num)] = result_classes[class_num] + '_test'
+
+# directories = {
+#     'train_0' : 'no_THA_train',
+#     'train_1' : 'yes_THA_train',
+#     'val_0' : 'no_THA_val',
+#     'val_1' : 'yes_THA_val',
+#     'test_0' : 'no_THA_test',
+#     'test_1' : 'yes_THA_test'
+# }
+
 
 class THADataset(Dataset):
     def __init__(self, mode, transform=None):
