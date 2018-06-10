@@ -152,7 +152,7 @@ def main():
 def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     batch_size=10
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
-    radio_val = THADataset(train='test', transform=val_data_transform)
+    radio_val = THADataset(mode='test', transform=val_data_transform)
     radio_data_loader = DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
 
     model.train(False)
@@ -162,76 +162,79 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     print(total)
 
     def do_gpu(x):
-      return x.cuda() if use_gpu else x
+        return x.cuda() if use_gpu else x
 
     if use_gpu:
-      model = model.cuda()
+        model = model.cuda()
 
-
-
-
-    TP = 0 # pred true, label true
-    TN = 0 # pred false, label false
-    FP = 0 # pred true, label false
-    FN = 0 # pred false, label true
+    TP = 0  # pred true, label true
+    TN = 0  # pred false, label false
+    FP = 0  # pred true, label false
+    FN = 0  # pred false, label true
 
     y_true = []
     y_score = []
     for data in radio_data_loader:
-      inputs, labels = data
+        inputs, labels = data
 
-      """
-      # show first images of the batch
-      plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
-      plt.show()
-      """
+        """
+        # show first images of the batch
+        plt.imshow(np.transpose(inputs.numpy()[0], (1,2,0)))
+        plt.show()
+        """
 
-      original = inputs
-      inputs = Variable(do_gpu(inputs)).float()
-      labels = Variable(do_gpu(labels)).long()
+        original = inputs
+        inputs = Variable(do_gpu(inputs)).float()
+        labels = Variable(do_gpu(labels)).long()
 
-      # forward
-      outputs = model(inputs)
+        # forward
+        outputs = model(inputs)
 
-      local_y_score = F.softmax(outputs, 1)
+        local_y_score = F.softmax(outputs, 1)
 
-      if use_gpu:
-        y_score.append(local_y_score.data.cpu().numpy())
-        y_true.append(labels.data.cpu().numpy())
-      else:
-        y_score.append(local_y_score.data.numpy())
-        y_true.append(labels.data.numpy())
+        if use_gpu:
+            y_score.append(local_y_score.data.cpu().numpy())
+            y_true.append(labels.data.cpu().numpy())
+        else:
+            y_score.append(local_y_score.data.numpy())
+            y_true.append(labels.data.numpy())
 
-      _, preds = torch.max(outputs.data, 1)
+        _, preds = torch.max(outputs.data, 1)
 
-      # statistics
-      running_corrects += torch.sum(preds == labels.data)
+        # statistics
+        running_corrects += torch.sum(preds == labels.data)
 
-      # ROC curve analysis
-      preds = preds.float().cpu().numpy()
-      labels = labels.data.float().cpu().numpy()
-      TP += np.sum(np.logical_and(preds == 1.0, labels == 1.0))
-      TN += np.sum(np.logical_and(preds == 0.0, labels == 0.0))
-      FP += np.sum(np.logical_and(preds == 1.0, labels == 0.0))
-      FN += np.sum(np.logical_and(preds == 0.0, labels == 1.0))
+        # ROC curve analysis
+        preds = preds.float().cpu().numpy()
+        labels = labels.data.float().cpu().numpy()
+        TP += np.sum(np.logical_and(preds == 1.0, labels == 1.0))
+        TN += np.sum(np.logical_and(preds == 0.0, labels == 0.0))
+        FP += np.sum(np.logical_and(preds == 1.0, labels == 0.0))
+        FN += np.sum(np.logical_and(preds == 0.0, labels == 1.0))
 
-      """
-      # show incorrectly classified images
-      for idx in range(len(original)):
-        if (preds != labels.data)[idx]:
-          plt.imshow(np.transpose(original.numpy()[idx], (1,2,0)))
-          plt.show()
-          # print('here', idx)
-      """
+        """
+        # show incorrectly classified images
+        for idx in range(len(original)):
+          if (preds != labels.data)[idx]:
+            plt.imshow(np.transpose(original.numpy()[idx], (1,2,0)))
+            plt.show()
+            # print('here', idx)
+        """
 
     print('---------  correct: {:03d} -----------'.format(running_corrects))
     print('---------  total: {:03d} -----------'.format(total))
     print('---------  accuracy: {:.4f} -----------'.format(float(running_corrects)/total))
 
+    output = open('test_result' + str(weightfile) + '.txt', 'w')
+
+    output.write('---------  correct: {:03d} -----------'.format(running_corrects) + "\n")
+    output.write('---------  total: {:03d} -----------'.format(total) + "\n")
+    output.write('---------  accuracy: {:.4f} -----------'.format(float(running_corrects) / total) + "\n")
+
     y_true = np.concatenate(y_true, 0)
     y_true2 = np.zeros((y_true.shape[0], 2))
     for column in range(y_true2.shape[1]):
-      y_true2[:, column] = (y_true == column)
+        y_true2[:, column] = (y_true == column)
     y_true = y_true2
 
     y_score = np.concatenate(y_score, 0)
@@ -277,8 +280,19 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     pos_pred_val = TP / (TP + FP)
     neg_pred_val = TN / (TN + FN)
 
-    print('sensitivity: %f\nspecificity: %f\npositive likelihood value: %f\nnegative likelihood value: %f\npositive predictive value: %f\nnegative predictive value: %f\nTP: %f\nTN: %f\nFP: %f\nFN: %f'
-            % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val, TP, TN, FP, FN))
+    print('sensitivity: %f\nspecificity:'
+          '%f\npositive likelihood value: %f\nnegative likelihood value:'
+          '%f\npositive predictive value: %f\nnegative predictive value:'
+          '%f\nTP: %f\nTN: %f\nFP: %f\nFN: %f'
+          % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val, TP, TN, FP, FN))
+
+    output.write(
+        'sensitivity: %f\nspecificity:'
+        '%f\npositive likelihood value: %f\nnegative likelihood value:'
+        '%f\npositive predictive value: %f\nnegative predictive value:'
+        '%f\nTP: %f\nTN: %f\nFP: %f\nFN: %f'
+        % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val, TP, TN, FP, FN))
+    output.close()
 
 if __name__ == '__main__':
     main()
