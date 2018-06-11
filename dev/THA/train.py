@@ -57,6 +57,7 @@ class_weights = None
 if use_gpu and class_weights is not None:
     class_weights = class_weights.cuda().float()
 
+
 def main():
     # model
     if args.network == 'resnet18':
