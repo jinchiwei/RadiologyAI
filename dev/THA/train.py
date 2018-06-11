@@ -250,15 +250,15 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
 
             # deep copy the model
             if phase == 'val' and epoch_acc > best_acc:
-              best_acc = epoch_acc
-              best_model_wts = model.state_dict()
-              torch.save(best_model_wts, 'weights/' + weight_out_dir + '/{:03d}_{:.3f}.pkl'.format(epoch, epoch_acc))
+                best_acc = epoch_acc
+                best_model_wts = model.state_dict()
+                torch.save(best_model_wts, 'weights/' + weight_out_dir + '/{:03d}_{:.3f}.pkl'.format(epoch, epoch_acc))
             if phase == 'train':
-              epoch_info[0] = epoch_loss
-              epoch_info[1] = epoch_acc
+                epoch_info[0] = epoch_loss
+                epoch_info[1] = epoch_acc
             else:
-              epoch_info[2] = epoch_loss
-              epoch_info[3] = epoch_acc
+                epoch_info[2] = epoch_loss
+                epoch_info[3] = epoch_acc
         LOG_FILE.write(str(epoch_info[0]) + ' ' + str(epoch_info[1]) + ' ' + str(epoch_info[2])
                        + ' ' + str(epoch_info[3]) + '\n')
         print()
@@ -278,5 +278,5 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
 
 
 if __name__ == '__main__':
-  main()
+    main()
 
