@@ -36,7 +36,7 @@ args = parser.parse_args()
 result_classes = {
     0: 'no_THA',
     1: 'yes_THA',
-    2: 'yes_HRA'
+    # 2: 'yes_HRA'
 }
 
 

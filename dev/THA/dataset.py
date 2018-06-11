@@ -8,7 +8,7 @@ import numpy as np
 result_classes = {
     0: 'no_THA',
     1: 'yes_THA',
-    2: 'yes_HRA'
+    # 2: 'yes_HRA'
 }
 
 dataset_dir = 'dataset/100_20_30'

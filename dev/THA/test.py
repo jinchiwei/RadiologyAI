@@ -41,7 +41,7 @@ def main():
     result_classes = {
         0: 'no_THA',
         1: 'yes_THA',
-        #2: 'yes_HRA'
+        # 2: 'yes_HRA'
     }
 
     ############ testing ############
@@ -233,7 +233,8 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     output.write('---------  total: {:03d} -----------'.format(total) + "\n")
     output.write('---------  accuracy: {:.4f} -----------'.format(float(running_corrects) / total) + "\n")
 
-    roc_auc_metrics(y_true, y_score, n_classes, weightfile)  # call statistics file for roc/auc
+    if n_classes < 3:  # roc/auc for binary output
+        roc_auc_metrics(y_true, y_score, n_classes, weightfile)  # call statistics file for roc/auc
 
     sensitivity  = TP / (TP + FN)
     specificity  = TN / (TN + FP)
