@@ -6,8 +6,9 @@ import numpy as np
 
 ############ dataloader ############
 result_classes = {
-    0 : 'no_THA',
-    1 : 'yes_THA'
+    0: 'no_THA',
+    1: 'yes_THA',
+    2: 'yes_HRA'
 }
 
 dataset_dir = 'dataset/100_20_30'
@@ -27,7 +28,7 @@ for class_num in result_classes:
 # }
 
 
-class THADataset(Dataset):
+class read_dataset(Dataset):
     def __init__(self, mode, transform=None):
         """
         Args:

@@ -25,7 +25,8 @@ from PIL import Image
 import time
 
 from models import ResNet18_pretrained, inception_v3_pretrained, AlexNet_pretrained, SqueezeNet_pretrained, VGGNet_pretrained, DenseNet_pretrained
-from dataset import THADataset
+from dataset import read_dataset
+from test_statistics import roc_auc_metrics
 import argparse
 from sklearn import metrics
 
@@ -38,8 +39,9 @@ def main():
     args = parser.parse_args()
 
     result_classes = {
-      0:'no_THA',
-      1:'yes_THA'
+        0: 'no_THA',
+        1: 'yes_THA',
+        #2: 'yes_HRA'
     }
 
     ############ testing ############
@@ -152,7 +154,7 @@ def main():
 def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     batch_size=10
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
-    radio_val = THADataset(mode='test', transform=val_data_transform)
+    radio_val = read_dataset(mode='test', transform=val_data_transform)
     radio_data_loader = DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
 
     model.train(False)
@@ -231,47 +233,48 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     output.write('---------  total: {:03d} -----------'.format(total) + "\n")
     output.write('---------  accuracy: {:.4f} -----------'.format(float(running_corrects) / total) + "\n")
 
-    y_true = np.concatenate(y_true, 0)
-    y_true2 = np.zeros((y_true.shape[0], 2))
-    for column in range(y_true2.shape[1]):
-        y_true2[:, column] = (y_true == column)
-    y_true = y_true2
-
-    y_score = np.concatenate(y_score, 0)
-
-    # print(y_true)
-    # print(y_score)
-
-    # Compute ROC curve and ROC area for each class
-    fpr = dict()
-    tpr = dict()
-    roc_auc = dict()
-    for i in range(n_classes):
-        fpr[i], tpr[i], _ = metrics.roc_curve(y_true[:, i], y_score[:, i])
-        roc_auc[i] = metrics.auc(fpr[i], tpr[i])
-
-    # # Compute micro-average ROC curve and ROC area
-    # fpr["micro"], tpr["micro"], _ = metrics.roc_curve(y_test.ravel(), y_score.ravel())
-    # roc_auc["micro"] = metrics.auc(fpr["micro"], tpr["micro"])
-
-    plt.figure()
-    lw = 2
-    plt.plot(fpr[1], tpr[1], color='darkorange',
-             lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[1])
-    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.xlabel('1-Specificity')
-    plt.ylabel('Sensitivity')
-    plt.title('Receiver operating characteristic example')
-    plt.legend(loc="lower right")
-    plt.show()
-    plt.savefig('roc' + str(weightfile) + '.png')
+    # y_true = np.concatenate(y_true, 0)
+    # y_true2 = np.zeros((y_true.shape[0], 2))
+    # for column in range(y_true2.shape[1]):
+    #     y_true2[:, column] = (y_true == column)
+    # y_true = y_true2
+    #
+    # y_score = np.concatenate(y_score, 0)
+    #
+    # # print(y_true)
+    # # print(y_score)
+    #
+    # # Compute ROC curve and ROC area for each class
+    # fpr = dict()
+    # tpr = dict()
+    # roc_auc = dict()
+    # for i in range(n_classes):
+    #     fpr[i], tpr[i], _ = metrics.roc_curve(y_true[:, i], y_score[:, i])
+    #     roc_auc[i] = metrics.auc(fpr[i], tpr[i])
+    #
+    # # # Compute micro-average ROC curve and ROC area
+    # # fpr["micro"], tpr["micro"], _ = metrics.roc_curve(y_test.ravel(), y_score.ravel())
+    # # roc_auc["micro"] = metrics.auc(fpr["micro"], tpr["micro"])
+    #
+    # plt.figure()
+    # lw = 2
+    # plt.plot(fpr[1], tpr[1], color='darkorange',
+    #          lw=lw, label='ROC curve (area = %0.2f)' % roc_auc[1])
+    # plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+    #
+    # plt.xlim([0.0, 1.0])
+    # plt.ylim([0.0, 1.05])
+    # plt.xlabel('1-Specificity')
+    # plt.ylabel('Sensitivity')
+    # plt.title('Receiver operating characteristic example')
+    # plt.legend(loc="lower right")
     # plt.show()
+    # plt.savefig('roc' + str(weightfile) + '.png')
+    #
+    # auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
+    # print('auc_score: ', auc_score)
 
-    auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
-    print('auc_score: ', auc_score)
+    roc_auc_metrics(y_true, y_score, n_classes, weightfile)
 
     sensitivity  = TP / (TP + FN)
     specificity  = TN / (TN + FP)

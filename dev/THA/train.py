@@ -23,7 +23,7 @@ from PIL import Image
 import time
 
 from models import ResNet18_pretrained, inception_v3_pretrained, AlexNet_pretrained, SqueezeNet_pretrained, VGGNet_pretrained, DenseNet_pretrained
-from dataset import THADataset
+from dataset import read_dataset
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -34,8 +34,9 @@ args = parser.parse_args()
 
 
 result_classes = {
-    0 : 'no_THA',
-    1 : 'yes_THA'
+    0: 'no_THA',
+    1: 'yes_THA',
+    2: 'yes_HRA'
 }
 
 
@@ -144,8 +145,8 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
             #                      std=[0.21329397, 0.215493, 0.21677108]),
         ])
 
-    radio_train = THADataset(mode='train', transform=train_data_transform)
-    radio_val = THADataset(mode='val', transform=val_data_transform)
+    radio_train = read_dataset(mode='train', transform=train_data_transform)
+    radio_val = read_dataset(mode='val', transform=val_data_transform)
 
     dataloaders = {
         'train': DataLoader(radio_train, batch_size=batch_size, shuffle=True, num_workers=2),
@@ -268,6 +269,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs):
     output.write('Training complete in {:.0f}m {:.0f}s'.format(
         time_elapsed // 60, time_elapsed % 60))
     output.write('Best val Acc: {:4f}'.format(best_acc))
+    output.close()
 
     # load best model weights
     model.load_state_dict(best_model_wts)
