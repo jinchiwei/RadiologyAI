@@ -1,32 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-import argparse
 import matplotlib
 matplotlib.use('Agg') # Added for display errors
 from matplotlib import pyplot as plt
 import numpy as np
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.autograd import Variable
-
-from torch.utils.data import DataLoader
-from torch.utils.data.dataset import Dataset
-from torchvision import datasets, transforms, models
-import torch.optim.lr_scheduler as sch
-import torch.nn.functional as F
-
-import os, sys
-from skimage import io
-
-from PIL import Image
-import time
-
-from models import ResNet18_pretrained, inception_v3_pretrained, AlexNet_pretrained, SqueezeNet_pretrained, VGGNet_pretrained, DenseNet_pretrained
-from dataset import read_dataset
-import argparse
 from sklearn import metrics
 
 
