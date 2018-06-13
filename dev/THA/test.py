@@ -39,9 +39,8 @@ def main():
     args = parser.parse_args()
 
     result_classes = {
-        0: 'no_THA',
-        1: 'yes_THA',
-        # 2: 'yes_HRA'
+        0: 'no_emphysema',
+        1: 'yes_emphysema'
     }
 
     ############ testing ############
@@ -49,10 +48,10 @@ def main():
     n_classes = len(result_classes)
     if args.network == 'resnet18':
         model = ResNet18_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_resnet18/resnet18_weights')
+        weightslist = os.listdir('weights/resnet18_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
-            load_file = 'weights_resnet18/resnet18_weights/' + weightslist[weightfile]
+            load_file = 'weights/resnet18_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((256, 256)),
@@ -66,10 +65,10 @@ def main():
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'inception_v3':
         model = inception_v3_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_inception_v3/inception_v3_weights')
+        weightslist = os.listdir('weights/inception_v3_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
-            load_file = 'weights_inception_v3/inception_v3_weights' + weightslist[weightfile]
+            load_file = 'weights/inception_v3_weights' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((300, 300)),
@@ -83,10 +82,10 @@ def main():
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'alexnet':
         model = AlexNet_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_alexnet/alexnet_weights')
+        weightslist = os.listdir('weights/alexnet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
-            load_file = 'weights_alexnet/alexnet_weights/' + weightslist[weightfile]
+            load_file = 'weights/alexnet_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((256, 256)),
@@ -100,10 +99,10 @@ def main():
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'squeezenet':
         model = SqueezeNet_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_squeezenet/squeezenet_weights')
+        weightslist = os.listdir('weights/squeezenet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
-            load_file = 'weights_squeezenet/squeezenet_weights/' + weightslist[weightfile]
+            load_file = 'weights/squeezenet_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((256, 256)),
@@ -117,10 +116,10 @@ def main():
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'vggnet':
         model = VGGNet_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_vggnet/vggnet_weights')
+        weightslist = os.listdir('weights/vggnet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
-            load_file = 'weights_vggnet/vggnet_weights/' + weightslist[weightfile]
+            load_file = 'weights/vggnet_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((256, 256)),
@@ -134,10 +133,10 @@ def main():
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile)
     elif args.network == 'densenet':
         model = DenseNet_pretrained(n_classes, freeze=False)
-        weightslist = os.listdir('weights_densenet/densenet_weights')
+        weightslist = os.listdir('weights/densenet_weights')
         weightsnum = len(weightslist) - 1
         for weightfile in range(weightsnum):
-            load_file = 'weights_densenet/densenet_weights/' + weightslist[weightfile]
+            load_file = 'weights/densenet_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((256, 256)),
