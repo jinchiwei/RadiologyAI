@@ -96,10 +96,10 @@ def main():
     # optimizer = torch.optim.Adam(model.classifier.parameters(), lr=lr, weight_decay=L2_weight_decay)
     exp_lr_scheduler = sch.StepLR(optimizer, step_size=50, gamma=0.1)
 
-    model = train_model(model, criterion, optimizer, exp_lr_scheduler, num_epochs=num_epochs, network)
+    model = train_model(model, criterion, optimizer, exp_lr_scheduler, network, num_epochs=num_epochs)
   
 
-def train_model(model, criterion, optimizer, scheduler, num_epochs=num_epochs, network):
+def train_model(model, criterion, optimizer, scheduler, network, num_epochs=num_epochs):
     if args.network == 'resnet18' or args.network == 'alexnet' or args.network == 'squeezenet' or args.network == 'vggnet' or args.network == 'densenet':
         train_data_transform = transforms.Compose([
             transforms.ToPILImage(),
