@@ -46,7 +46,7 @@ def roc_auc_metrics(y_true, y_score, n_classes, weightfile, network):
     plt.title('Receiver operating characteristic example')
     plt.legend(loc="lower right")
     plt.show()
-    plt.savefig('roc' + network + str(weightfile) + '.png')
+    plt.savefig('roc_' + network + '_' + str(weightfile) + '.png')
 
     auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
     print('auc_score: ', auc_score)
