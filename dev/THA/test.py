@@ -38,7 +38,6 @@ def main():
         help='Choose which neural network to use')
     args = parser.parse_args()
     network = args.network
-    print(network)
 
     result_classes = {
         0: 'no_emphysema',
