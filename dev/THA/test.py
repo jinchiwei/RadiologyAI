@@ -233,7 +233,7 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile):
     output.write('---------  accuracy: {:.4f} -----------'.format(float(running_corrects) / total) + "\n")
 
     if n_classes < 3:  # roc/auc for binary output
-        roc_auc_metrics(y_true, y_score, n_classes, weightfile)  # call statistics file for roc/auc
+        roc_auc_metrics(y_true, y_score, n_classes, weightfile, args.network)  # call statistics file for roc/auc
 
     sensitivity  = TP / (TP + FN)
     specificity  = TN / (TN + FP)
