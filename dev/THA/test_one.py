@@ -103,7 +103,7 @@ def main():
         weightslist = os.listdir('weights/squeezenet_weights')
         weightsnum = len(weightslist) - 1
         weightfile = len(weightslist) - 1
-        load_file = 'weights/resnet18_weights/' + weightslist[weightsnum]
+        load_file = 'weights/squeezenet_weights/' + weightslist[weightsnum]
         val_data_transform = transforms.Compose([
             transforms.ToPILImage(),
             transforms.Resize((256, 256)),
@@ -120,7 +120,7 @@ def main():
         weightslist = os.listdir('weights/vggnet_weights')
         weightsnum = len(weightslist) - 1
         weightfile = len(weightslist) - 1
-        load_file = 'weights/resnet18_weights/' + weightslist[weightsnum]
+        load_file = 'weights/vggnet_weights/' + weightslist[weightsnum]
         val_data_transform = transforms.Compose([
             transforms.ToPILImage(),
             transforms.Resize((256, 256)),
@@ -137,7 +137,7 @@ def main():
         weightslist = os.listdir('weights/densenet_weights')
         weightsnum = len(weightslist) - 1
         weightfile = len(weightslist) - 1
-        load_file = 'weights/resnet18_weights/' + weightslist[weightsnum]
+        load_file = 'weights/densenet_weights/' + weightslist[weightsnum]
         val_data_transform = transforms.Compose([
             transforms.ToPILImage(),
             transforms.Resize((256, 256)),
