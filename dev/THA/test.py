@@ -69,9 +69,9 @@ def main():
     use_gpu = torch.cuda.is_available()
     if args.network == 'resnet18' or args.network == 'alexnet' or args.network == 'squeezenet' or args.network == 'vggnet' or args.network == 'densenet':
         weightslist = os.listdir('weights/' + network + '_weights/')
-        weightsnum = len(weightslist) - 2
-        for weightfile in range(weightsnum):
-            load_file = 'weights/' + network + '_weights/' + weightslist[weightsnum]
+        weightsnum = len(weightslist)
+        for weightfile in range(1, weightsnum):
+            load_file = 'weights/' + network + '_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((256, 256)),
@@ -84,10 +84,10 @@ def main():
             ])
             test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile, network)
     elif args.network == 'inception_v3':
-        weightslist = os.listdir('weights/inception_v3_weights')
-        weightsnum = len(weightslist) - 2
-        for weightfile in range(weightsnum):
-            load_file = 'weights/inception_v3_weights' + weightslist[weightfile]
+        weightslist = os.listdir('weights/inception_v3_weights/')
+        weightsnum = len(weightslist)
+        for weightfile in range(1, weightsnum):
+            load_file = 'weights/inception_v3_weights/' + weightslist[weightfile]
             val_data_transform = transforms.Compose([
               transforms.ToPILImage(),
               transforms.Resize((300, 300)),
