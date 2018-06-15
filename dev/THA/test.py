@@ -71,7 +71,7 @@ def main():
         weightslist = os.listdir('weights/' + network + '_weights/')
         weightsnum = len(weightslist)
         for weightfile in range(weightsnum):
-            if not sample.startswith('LOG'):  # avoid LOG.txt
+            if not weightfile.startswith('LOG'):  # avoid LOG.txt
                 load_file = 'weights/' + network + '_weights/' + weightslist[weightfile]
                 val_data_transform = transforms.Compose([
                   transforms.ToPILImage(),
@@ -88,7 +88,7 @@ def main():
         weightslist = os.listdir('weights/inception_v3_weights/')
         weightsnum = len(weightslist)
         for weightfile in range(weightsnum):
-            if not sample.startswith('LOG'):  # avoid LOG.txt
+            if not weightfile.startswith('LOG'):  # avoid LOG.txt
                 load_file = 'weights/inception_v3_weights/' + weightslist[weightfile]
                 val_data_transform = transforms.Compose([
                   transforms.ToPILImage(),
