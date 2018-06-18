@@ -9,7 +9,7 @@ import numpy as np
 from sklearn import metrics
 
 
-def roc_auc_metrics(y_true, y_score, n_classes, weightfile):
+def roc_auc_metrics(y_true, y_score, n_classes, weightfile, network):
     y_true = np.concatenate(y_true, 0)
     y_true2 = np.zeros((y_true.shape[0], 2))
     for column in range(y_true2.shape[1]):
@@ -46,7 +46,7 @@ def roc_auc_metrics(y_true, y_score, n_classes, weightfile):
     plt.title('Receiver operating characteristic example')
     plt.legend(loc="lower right")
     plt.show()
-    plt.savefig('roc' + str(weightfile) + '.png')
+    plt.savefig('roc_' + network + '_' + str(weightfile) + '.png')
 
     auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
     print('auc_score: ', auc_score)

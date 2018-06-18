@@ -44,9 +44,9 @@ def AlexNet_pretrained(n_classes, freeze=True):
             param.requires_grad = True
 
     # change last layer to output n_classes
-    lastclasslayer = str(len(model.classifier.modules) - 1)
-    num_filters = model.classifier.modules[lastclasslayer].in_features
-    model.classifier.modules[lastclasslayer] = nn.Linear(num_filters, n_classes)
+    lastclasslayer = str(len(model.classifier._modules) - 1)
+    num_filters = model.classifier._modules[lastclasslayer].in_features
+    model.classifier._modules[lastclasslayer] = nn.Linear(num_filters, n_classes)
     return model
 
 
@@ -60,7 +60,7 @@ def SqueezeNet_pretrained(n_classes, freeze=True):
             param.requires_grad = True
 
     # change last layer to output n_classes
-    model.classifier.modules['1'] = nn.Conv2d(512, n_classes, kernel_size=(1, 1), stride=(1, 1))
+    model.classifier._modules['1'] = nn.Conv2d(512, n_classes, kernel_size=(1, 1), stride=(1, 1))
     model.num_classes = n_classes
     return model
 
@@ -75,9 +75,9 @@ def VGGNet_pretrained(n_classes, freeze=True):
             param.requires_grad = True
 
     # change last layer to output n_classes
-    lastclasslayer = str(len(model.classifier.modules) - 1)
-    num_filters = model.classifier.modules[lastclasslayer].in_features
-    model.classifier.modules[lastclasslayer] = nn.Linear(num_filters, n_classes)
+    lastclasslayer = str(len(model.classifier._modules) - 1)
+    num_filters = model.classifier._modules[lastclasslayer].in_features
+    model.classifier._modules[lastclasslayer] = nn.Linear(num_filters, n_classes)
     return model
 
 
