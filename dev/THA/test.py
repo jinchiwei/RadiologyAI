@@ -34,7 +34,7 @@ from sklearn import metrics
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--network',
-        choices=['resnet18', 'resnet50', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet18',
+        choices=['resnet18', 'resnet50', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet50',
         help='Choose which neural network to use')
     args = parser.parse_args()
     network = args.network
