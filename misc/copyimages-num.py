@@ -11,7 +11,7 @@ from shutil import copyfile
 filelistAP = input("List of grouped files: ")
 dir1 = input("Source directory: ")
 dir2 = input("New group directory: ")
-numcopy = input("Number of files required: ")
+numcopy = int(input("Number of files required: "))
 
 # for i in range(6):
 # 	AP_line = AP.read()
