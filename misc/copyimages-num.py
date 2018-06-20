@@ -11,6 +11,7 @@ from shutil import copyfile
 filelistAP = input("List of grouped files: ")
 dir1 = input("Source directory: ")
 dir2 = input("New group directory: ")
+numcopy = input("Number of files required: ")
 
 # for i in range(6):
 # 	AP_line = AP.read()
@@ -18,7 +19,7 @@ dir2 = input("New group directory: ")
 AP = open(filelistAP, "r")
 i = 1
 for filename in AP:
-	if i > 500:
+	if i > numcopy:
 		break
 	try:
 		filename_noline = filename.replace("\n", "")
