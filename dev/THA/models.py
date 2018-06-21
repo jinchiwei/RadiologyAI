@@ -21,7 +21,7 @@ def ResNet18_pretrained(n_classes, freeze=True):
 
 
 def ResNet50_pretrained(n_classes, freeze=True):
-    model = models.__dict__['resnet50'](pretrained=True)
+    model = models.resnet50(pretrained=True)
     # if weights are not frozen, train
     for param in model.parameters():
         if freeze:
