@@ -14,21 +14,20 @@ import os, sys
 from models import ResNet18_pretrained
 
 
-
-### input images
-dataset_dir = 'dataset/100_20_30'
-directories = {'no_train' : 'no_THA_train',
-                'yes_train' : 'yes_THA_train',
-                'no_val' : 'no_THA_val',
-                'yes_val' : 'yes_THA_val',
-                'no_test' : 'no_THA_test',
-                'yes_test' : 'yes_THA_test'}
-
-###  result classes
+# input images
+############ dataloader ############
 result_classes = {
-  0:'no_THA',
-  1:'yes_THA'
+    0: 'no_THA',
+    1: 'yes_THA',
+    # 2: 'yes_HRA'
 }
+
+dataset_dir = 'dataset/100_20_30'
+directories = {}
+for class_num in result_classes:
+    directories['train_' + str(class_num)] = result_classes[class_num] + '_train'
+    directories['val_' + str(class_num)] = result_classes[class_num] + '_val'
+    directories['test_' + str(class_num)] = result_classes[class_num] + '_test'
 
 ###  output directories
 output_dir = 'CAM'
@@ -42,7 +41,7 @@ if model_id == 1:
     finalconv_name = 'features'
 elif model_id == 2:
     net = ResNet18_pretrained(2, freeze=False)
-    load_file = 'weights_resnet_nonorm/resnet18_weights/005_0.900.pkl'
+    load_file = 'weights/resnet18_weights/005_0.900.pkl'
     net.load_state_dict(torch.load(os.path.join('./', load_file)))
     finalconv_name = 'layer4'
 elif model_id == 3:
@@ -78,7 +77,7 @@ def returnCAM(feature_conv, weight_softmax, class_idx):
 
 
 ################ REPETITION
-image_url = os.path.join(dataset_dir, directories['yes_train'])
+image_url = os.path.join(dataset_dir, directories['train_1'])
 samples = os.listdir(image_url)
 for sample in samples:
   
