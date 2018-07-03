@@ -31,7 +31,7 @@ for class_num in result_classes:
     output_dir = result_classes[class_num]
     if not os.path.exists(path + '/' + output_dir):
         os.makedirs(path + '/' + output_dir)
-        os.chmod(path + '/' + output_dir, 0o777)
+        # os.chmod(path + '/' + output_dir, 0o777)
 
 
 def main():
@@ -42,16 +42,22 @@ def main():
                 ])
     # model = models.resnet50(pretrained=True)
     # model.fc = nn.Linear(2048, 2)
-    model = ResNet50_pretrained(n_classes, freeze=False)
+    model = ResNet18_pretrained(n_classes, freeze=False)
     # model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage))
-    weightslist = os.listdir('weights/resnet50_weights')
+    weightslist = os.listdir('weights/resnet18_weights')
     weightsnum = len(weightslist)
     for weightfile in range(weightsnum):
         if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
-            load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
+            load_file = 'weights/resnet18_weights/' + weightslist[weightfile]
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
     model.eval()
-    for filename in os.listdir(path):
+    files = {}
+    filecounter = 0
+    for item in os.listdir(path):
+        if os.path.isfile(item):
+            files[filecounter] = item
+    for count in files:
+        filename = files[count]
         img = Image.open(path + filename).convert('RGB')
         img_tensor = data_transform(img)
         img_tensor.unsqueeze_(0)
