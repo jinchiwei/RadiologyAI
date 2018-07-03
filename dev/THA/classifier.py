@@ -42,7 +42,7 @@ def main():
                 ])
     # model = models.resnet50(pretrained=True)
     # model.fc = nn.Linear(2048, 2)
-    model = ResNet18_pretrained(n_classes, freeze=False)
+    model = ResNet50_pretrained(n_classes, freeze=False)
     # model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage))
     weightslist = os.listdir('weights/resnet50_weights')
     weightsnum = len(weightslist)
@@ -53,7 +53,7 @@ def main():
     model.eval()
 
     for filename in os.listdir(path):
-        if os.path.isdir(filename):  # skip directories
+        if os.path.isdir(path + filename):  # skip directories
             continue
         img = Image.open(path + filename).convert('RGB')
         img_tensor = data_transform(img)
