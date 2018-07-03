@@ -6,7 +6,7 @@ from PIL import Image
 import argparse
 import os
 from shutil import copyfile
-from models import ResNet18_pretrained
+from models import ResNet18_pretrained, ResNet50_pretrained
 
 
 # add command line arguments on what folder should be checked
@@ -29,8 +29,9 @@ softmax1 = nn.Softmax(dim=1)
 
 for class_num in result_classes:
     output_dir = result_classes[class_num]
-    if not os.path.exists(output_dir):
+    if not os.path.exists(path + '/' + output_dir):
         os.makedirs(path + '/' + output_dir)
+        os.chmod(path + '/' + output_dir, 0o777)
 
 
 def main():
@@ -41,13 +42,13 @@ def main():
                 ])
     # model = models.resnet50(pretrained=True)
     # model.fc = nn.Linear(2048, 2)
-    model = ResNet18_pretrained(n_classes, freeze=False)
+    model = ResNet50_pretrained(n_classes, freeze=False)
     # model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage))
-    weightslist = os.listdir('weights/resnet18_weights')
+    weightslist = os.listdir('weights/resnet50_weights')
     weightsnum = len(weightslist)
     for weightfile in range(weightsnum):
         if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
-            load_file = 'weights/resnet18_weights/' + weightslist[weightfile]
+            load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
     model.eval()
     for filename in os.listdir(path):
@@ -56,8 +57,9 @@ def main():
         img_tensor.unsqueeze_(0)
         img_variable = Variable(img_tensor)
         fc_out = model(img_variable)
-        print(filename + ": " + result_classes[fc_out.data.numpy().argmax()])
-        copyfile(path + "/" + filename, path + "/" + result_classes[fc_out.data.numpy().argmax()] + "/" + filename)
+        prediction = fc_out.data.numpy().argmax()
+        print(filename + ": " + result_classes[prediction])
+        copyfile(path + "/" + filename, path + "/" + result_classes[prediction] + "/" + filename)
 
 
 if __name__ == '__main__':
