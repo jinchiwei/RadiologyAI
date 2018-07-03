@@ -22,14 +22,14 @@ result_classes = {
     # 2: 'yes_HRA'
 }
 
-image_file = os.listdir('cam')[0]
+# image_file = os.listdir('cam')[0]
 
-#dataset_dir = 'dataset/100_20_30'
-#directories = {}
-#for class_num in result_classes:
-#    directories['train_' + str(class_num)] = result_classes[class_num] + '_train'
-#    directories['val_' + str(class_num)] = result_classes[class_num] + '_val'
-#    directories['test_' + str(class_num)] = result_classes[class_num] + '_test'
+# dataset_dir = 'dataset/100_20_30'
+# directories = {}
+# for class_num in result_classes:
+#     directories['train_' + str(class_num)] = result_classes[class_num] + '_train'
+#     directories['val_' + str(class_num)] = result_classes[class_num] + '_val'
+#     directories['test_' + str(class_num)] = result_classes[class_num] + '_test'
 
 ###  output directories
 output_dir = 'cam'
@@ -84,106 +84,107 @@ def returnCAM(feature_conv, weight_softmax, class_idx):
     return output_cam
 
 
-################ SINGLE IMAGE
-
-#image_url = os.path.join(dataset_dir, directories['train_1'])
-#samples = os.listdir(image_url)
-
-# hook the feature extractor
-features_blobs = []
-def hook_feature(module, input, output):
-    features_blobs.append(output.data.cpu().numpy())
-
-net._modules.get(finalconv_name).register_forward_hook(hook_feature)
-
-# get the softmax weight
-params = list(net.parameters())
-weight_softmax = np.squeeze(params[-2].data.numpy())
-
-img_name = os.path.splitext(image_file)[0]
-
-#image_file = os.path.join(image_url, sample)
-image_url = os.path.join('cam/', image_file)
-img_pil = Image.open(image_url).convert('RGB')
-img_pil.save(output_dir + '/' + img_name + '.jpg')
-
-img_tensor = preprocess(img_pil)
-img_variable = Variable(img_tensor.unsqueeze(0))
-logit = net(img_variable)
-
-# imagenet category list
-classes = {int(key):value for (key, value) in result_classes.items()}
-
-h_x = F.softmax(logit).data.squeeze()
-probs, idx = h_x.sort(0, True)
-
-# output the prediction
-#for i in range(0, 2):
-#    print('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
-
-# generate class activation mapping for the top1 prediction
-CAMs = returnCAM(features_blobs[0], weight_softmax, [idx[0]])
-
-# render the CAM and output
-#print('output CAM.jpg for the top1 prediction: %s'%classes[idx[0]])
-img = cv2.imread(output_dir + '/' + img_name + '.jpg')
-height, width, _ = img.shape
-heatmap = cv2.applyColorMap(cv2.resize(CAMs[0],(width, height)), cv2.COLORMAP_JET)
-result = heatmap * 0.3 + img * 0.5
-cv2.imwrite(output_dir + '/' + img_name + '_CAM' + '.jpg', result)
-################ SINGLE IMAGE
-
-
-################# REPETITION
-#image_url = os.path.join(dataset_dir, directories['train_1'])
-#samples = os.listdir(image_url)
-#for sample in samples:
-#  
-#  if sample.startswith('.'): # avoid .DS_Store
-#    continue
-#  
-#  # hook the feature extractor
-#  features_blobs = []
-#  def hook_feature(module, input, output):
-#      features_blobs.append(output.data.cpu().numpy())
+# ################ SINGLE IMAGE
 #
-#  net._modules.get(finalconv_name).register_forward_hook(hook_feature)
+# #image_url = os.path.join(dataset_dir, directories['train_1'])
+# #samples = os.listdir(image_url)
 #
-#  # get the softmax weight
-#  params = list(net.parameters())
-#  weight_softmax = np.squeeze(params[-2].data.numpy())
-#  
-#  img_name = os.path.splitext(sample)[0]
+# # hook the feature extractor
+# features_blobs = []
+# def hook_feature(module, input, output):
+#     features_blobs.append(output.data.cpu().numpy())
 #
-#  image_file = os.path.join(image_url, sample)
-#  img_pil = Image.open(image_file).convert('RGB')
-#  img_pil.save(output_dir + '/' + img_name + '.jpg')
+# net._modules.get(finalconv_name).register_forward_hook(hook_feature)
 #
-#  img_tensor = preprocess(img_pil)
-#  img_variable = Variable(img_tensor.unsqueeze(0))
-#  logit = net(img_variable)
+# # get the softmax weight
+# params = list(net.parameters())
+# weight_softmax = np.squeeze(params[-2].data.numpy())
 #
-#  # imagenet category list
-#  classes = {int(key):value for (key, value) in result_classes.items()}
+# img_name = os.path.splitext(image_file)[0]
 #
-#  h_x = F.softmax(logit).data.squeeze()
-#  probs, idx = h_x.sort(0, True)
+# #image_file = os.path.join(image_url, sample)
+# image_url = os.path.join('cam/', image_file)
+# img_pil = Image.open(image_url).convert('RGB')
+# img_pil.save(output_dir + '/' + img_name + '.jpg')
 #
-#  # output the prediction
-#  for i in range(0, 2):
-#      print('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
+# img_tensor = preprocess(img_pil)
+# img_variable = Variable(img_tensor.unsqueeze(0))
+# logit = net(img_variable)
 #
-#  # generate class activation mapping for the top1 prediction
-#  CAMs = returnCAM(features_blobs[0], weight_softmax, [idx[0]])
+# # imagenet category list
+# classes = {int(key):value for (key, value) in result_classes.items()}
 #
-#  # render the CAM and output
-#  print('output CAM.jpg for the top1 prediction: %s'%classes[idx[0]])
-#  img = cv2.imread(output_dir + '/' + img_name + '.jpg')
-#  height, width, _ = img.shape
-#  heatmap = cv2.applyColorMap(cv2.resize(CAMs[0],(width, height)), cv2.COLORMAP_JET)
-#  result = heatmap * 0.3 + img * 0.5
-#  cv2.imwrite(output_dir + '/' + img_name + '_CAM' + '.jpg', result)
-################# REPETITION
+# h_x = F.softmax(logit).data.squeeze()
+# probs, idx = h_x.sort(0, True)
+#
+# # output the prediction
+# #for i in range(0, 2):
+# #    print('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
+#
+# # generate class activation mapping for the top1 prediction
+# CAMs = returnCAM(features_blobs[0], weight_softmax, [idx[0]])
+#
+# # render the CAM and output
+# #print('output CAM.jpg for the top1 prediction: %s'%classes[idx[0]])
+# img = cv2.imread(output_dir + '/' + img_name + '.jpg')
+# height, width, _ = img.shape
+# heatmap = cv2.applyColorMap(cv2.resize(CAMs[0],(width, height)), cv2.COLORMAP_JET)
+# result = heatmap * 0.3 + img * 0.5
+# cv2.imwrite(output_dir + '/' + img_name + '_CAM' + '.jpg', result)
+# ################ SINGLE IMAGE
+
+
+################ REPETITION
+# image_url = os.path.join(dataset_dir, directories['train_1'])
+image_url = 'cam'
+samples = os.listdir(image_url)
+for sample in samples:
+
+    if sample.startswith('.'): # avoid .DS_Store
+        continue
+
+    # hook the feature extractor
+    features_blobs = []
+    def hook_feature(module, input, output):
+        features_blobs.append(output.data.cpu().numpy())
+
+    net._modules.get(finalconv_name).register_forward_hook(hook_feature)
+
+    # get the softmax weight
+    params = list(net.parameters())
+    weight_softmax = np.squeeze(params[-2].data.numpy())
+
+    img_name = os.path.splitext(sample)[0]
+
+    image_file = os.path.join(image_url, sample)
+    img_pil = Image.open(image_file).convert('RGB')
+    img_pil.save(output_dir + '/' + img_name + '.jpg')
+
+    img_tensor = preprocess(img_pil)
+    img_variable = Variable(img_tensor.unsqueeze(0))
+    logit = net(img_variable)
+
+    # imagenet category list
+    classes = {int(key):value for (key, value) in result_classes.items()}
+
+    h_x = F.softmax(logit).data.squeeze()
+    probs, idx = h_x.sort(0, True)
+
+    # # output the prediction
+    # for i in range(0, 2):
+    #     print('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
+
+    # generate class activation mapping for the top1 prediction
+    CAMs = returnCAM(features_blobs[0], weight_softmax, [idx[0]])
+
+    # render the CAM and output
+    # print('output CAM.jpg for the top1 prediction: %s'%classes[idx[0]])
+    img = cv2.imread(output_dir + '/' + img_name + '.jpg')
+    height, width, _ = img.shape
+    heatmap = cv2.applyColorMap(cv2.resize(CAMs[0],(width, height)), cv2.COLORMAP_JET)
+    result = heatmap * 0.3 + img * 0.5
+    cv2.imwrite(output_dir + '/' + img_name + '_CAM' + '.jpg', result)
+################ REPETITION
 
 
 
