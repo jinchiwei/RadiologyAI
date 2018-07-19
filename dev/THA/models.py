@@ -34,6 +34,19 @@ def ResNet50_pretrained(n_classes, freeze=True):
     model.fc = nn.Linear(num_filters, n_classes)
     return model
 
+def ResNet152_pretrained(n_classes, freeze=True):
+    model = models.resnet152(pretrained=True)
+    # if weights are not frozen, train
+    for param in model.parameters():
+        if freeze:
+            param.requires_grad = False
+        else:
+            param.requires_grad = True
+
+    # change last layer to output n_classes
+    num_filters = model.fc.in_features
+    model.fc = nn.Linear(num_filters, n_classes)
+    return model
 
 def inception_v3_pretrained(n_classes, freeze=True):
     model = models.__dict__['inception_v3'](pretrained=True)

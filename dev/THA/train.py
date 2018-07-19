@@ -22,13 +22,13 @@ from skimage import io
 from PIL import Image
 import time
 
-from models import ResNet18_pretrained, ResNet50_pretrained, inception_v3_pretrained, AlexNet_pretrained, SqueezeNet_pretrained, VGGNet_pretrained, DenseNet_pretrained
+from models import ResNet18_pretrained, ResNet50_pretrained, ResNet152_pretrained, inception_v3_pretrained, AlexNet_pretrained, SqueezeNet_pretrained, VGGNet_pretrained, DenseNet_pretrained
 from dataset import read_dataset
 import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
-    choices=['resnet18', 'resnet50', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet50',
+    choices=['resnet18', 'resnet50', 'resnet152', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet50',
     help='Choose which neural network to use')
 args = parser.parse_args()
 network = args.network
@@ -67,6 +67,9 @@ def main():
     elif args.network == 'resnet50':
         model = ResNet50_pretrained(n_classes, freeze=False)
         print('model is resnet50')
+    elif args.network == 'resnet152':
+        model = ResNet152_pretrained(n_classes, freeze=False)
+        print('model is resnet50')
     elif args.network == 'inception_v3':
         model = inception_v3_pretrained(n_classes, freeze=False)
         print('model is inception_v3')
@@ -102,7 +105,7 @@ def main():
     model = train_model(model, criterion, optimizer, exp_lr_scheduler, network, num_epochs=num_epochs)
 
 def train_model(model, criterion, optimizer, scheduler, network, num_epochs=num_epochs):
-    if args.network == 'resnet18' or args.network == 'resnet50' or args.network == 'alexnet' or args.network == 'squeezenet' or args.network == 'vggnet' or args.network == 'densenet':
+    if args.network == 'resnet18' or args.network == 'resnet50'or args.network == 'resnet152' or args.network == 'alexnet' or args.network == 'squeezenet' or args.network == 'vggnet' or args.network == 'densenet':
         train_data_transform = transforms.Compose([
             transforms.ToPILImage(),
             transforms.Resize((256, 256)),
