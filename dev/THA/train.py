@@ -90,8 +90,11 @@ def main():
     criterion = nn.CrossEntropyLoss(weight=class_weights) # equivalent to NLL Loss + softmax = cross entropy
     print("Starting!")
     if use_gpu:
-        print("using gpu")
+        print("using " + str(torch.cuda.device_count()) + " gpu")
         model = model.cuda()
+        if torch.cuda.device_count() > 1:
+            a = list(range(0, torch.cuda.device_count() - 1))
+            model = nn.DataParallel(model, device_ids=a)
         criterion = criterion.cuda()
     sys.stdout.flush()
 
