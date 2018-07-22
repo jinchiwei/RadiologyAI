@@ -50,9 +50,6 @@ use_gpu = torch.cuda.is_available()
 n_classes = len(list(result_classes.keys()))
 L2_weight_decay = 1e-5
 batch_size = 10
-if torch.cuda.device_count() > 1:
-    batch_size = 35*torch.cuda.device_count()
-
 num_epochs = 50
 lr = 0.001
 momentum = 0.9
@@ -93,7 +90,7 @@ def main():
     criterion = nn.CrossEntropyLoss(weight=class_weights) # equivalent to NLL Loss + softmax = cross entropy
     print("Starting!")
     if use_gpu:
-        print("Using " + torch.cuda.device_count() + " GPU(s)")
+        print("Using " + str(torch.cuda.device_count()) + " GPU(s)")
         if torch.cuda.device_count() > 1:
             gpu_ids = list(range(torch.cuda.device_count()))
             model = nn.DataParallel(model, device_ids=gpu_ids).cuda()
