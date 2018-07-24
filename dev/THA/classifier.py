@@ -45,13 +45,24 @@ def main():
     model = ResNet50_pretrained(n_classes, freeze=False)
     # model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage))
     weightslist = os.listdir('weights/resnet50_weights')
-    weightsnum = len(weightslist) - 1
+    weightsnum = len(weightslist) -1
     if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
         weightsnum = weightsnum - 1
-    load_file = 'weights/resnet50_weights/' + weightslist[weightsnum]
+    # load_file = 'weights/resnet50_weights/' + weightslist[weightsnum]
+    load_file = 'weights/resnet50_weights/010_1.000.pkl'
     # for weightfile in range(weightsnum):
-    #     if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
-    #         load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
+        # if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
+            # load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
+
+    use_gpu = torch.cuda.is_available()
+    if use_gpu:
+        print("Using " + str(torch.cuda.device_count()) + 'GPU(s)')
+        if torch.cuda.device_count() > 1:
+            gpu_ids = list(range(torch.cuda.device_count()))
+            model = nn.DataParallel(model, device_ids=gpu_ids).cuda()
+        else:
+            model = model.cuda()
+
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
     model.eval()
 
@@ -63,7 +74,10 @@ def main():
         img_tensor.unsqueeze_(0)
         img_variable = Variable(img_tensor)
         fc_out = model(img_variable)
-        prediction = fc_out.data.numpy().argmax()
+        if use_gpu:
+            prediction = fc_out.data.cpu().numpy().argmax()
+        else:
+            prediction = fc_out.data.numpy().argmax()
         print(filename + ": " + result_classes[prediction])
         copyfile(path + "/" + filename, path + "/" + result_classes[prediction] + "/" + filename)
 

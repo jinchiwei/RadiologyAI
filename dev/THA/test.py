@@ -111,6 +111,15 @@ def main():
 
 def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile, network):
     batch_size=10
+
+    if use_gpu:
+        print('Using ' + str(torch.cuda.device_count()) + ' GPU(s)')
+        if torch.cuda.device_count() > 1:
+            gpu_ids = list(range(torch.cuda.device_count()))
+            model = nn.DataParallel(model, device_ids=gpu_ids).cuda()
+        else:
+            model = model.cuda()
+
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
     radio_val = read_dataset(mode='test', transform=val_data_transform)
     radio_data_loader = DataLoader(radio_val, batch_size=batch_size, shuffle=True, num_workers=2)
@@ -123,9 +132,6 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile, n
 
     def do_gpu(x):
         return x.cuda() if use_gpu else x
-
-    if use_gpu:
-        model = model.cuda()
 
     TP = 0  # pred true, label true
     TN = 0  # pred false, label false
