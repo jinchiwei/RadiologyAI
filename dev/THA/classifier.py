@@ -45,10 +45,13 @@ def main():
     model = ResNet50_pretrained(n_classes, freeze=False)
     # model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage))
     weightslist = os.listdir('weights/resnet50_weights')
-    weightsnum = len(weightslist)
-    for weightfile in range(weightsnum):
-        if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
-            load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
+    weightsnum = len(weightslist) - 1
+    if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
+        weightsnum = weightsnum - 1
+    load_file = 'weights/resnet50_weights/' + weightslist[weightsnum]
+    # for weightfile in range(weightsnum):
+    #     if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
+    #         load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
     model.eval()
 

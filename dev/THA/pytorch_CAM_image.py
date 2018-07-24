@@ -44,19 +44,19 @@ if model_id == 1:
 elif model_id == 2:
     net = ResNet18_pretrained(2, freeze=False)
     weightslist = os.listdir('weights/resnet18_weights')
-    weightsnum = len(weightslist)
-    for weightfile in range(weightsnum):
-        if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
-            load_file = 'weights/resnet18_weights/' + weightslist[weightfile]
+    weightsnum = len(weightslist) - 1
+    if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
+        weightsnum = weightsnum - 1
+    load_file = 'weights/resnet18_weights/' + weightslist[weightsnum]
     net.load_state_dict(torch.load(os.path.join('./', load_file)))
     finalconv_name = 'layer4'
 elif model_id == 3:
     net = ResNet50_pretrained(2, freeze=False)
     weightslist = os.listdir('weights/resnet50_weights')
-    weightsnum = len(weightslist)
-    for weightfile in range(weightsnum):
-        if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
-            load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
+    weightsnum = len(weightslist) - 1
+    if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
+        weightsnum = weightsnum - 1
+    load_file = 'weights/resnet50_weights/' + weightslist[weightsnum]
     net.load_state_dict(torch.load(os.path.join('./', load_file)))
     finalconv_name = 'layer4'
 net.eval()
