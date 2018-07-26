@@ -171,8 +171,8 @@ for sample in samples:
     probs, idx = h_x.sort(0, True)
 
     # # output the prediction
-    # for i in range(0, 2):
-    #     print('{:.3f} -> {}'.format(probs[i], classes[idx[i]]))
+    for i in range(0, 2):
+        print('{:.3f} -> {}'.format(probs[i], classes[idx[i].item()]))
 
     # generate class activation mapping for the top1 prediction
     CAMs = returnCAM(features_blobs[0], weight_softmax, [idx[0]])
