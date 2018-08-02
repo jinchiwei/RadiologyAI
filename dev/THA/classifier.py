@@ -23,6 +23,7 @@ result_classes = {
 }
 n_classes = len(result_classes)
 
+use_gpu = torch.cuda.is_available()
 modelPath = "./" + args.model
 softmax3 = nn.Softmax(dim=3)
 softmax1 = nn.Softmax(dim=1)
@@ -45,23 +46,23 @@ def main():
     model = ResNet50_pretrained(n_classes, freeze=False)
     # model.load_state_dict(torch.load(modelPath, map_location=lambda storage, loc: storage))
     weightslist = os.listdir('weights/resnet50_weights')
-    weightsnum = len(weightslist) -1
+    weightsnum = len(weightslist) - 1
     if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
         weightsnum = weightsnum - 1
-    # load_file = 'weights/resnet50_weights/' + weightslist[weightsnum]
-    load_file = 'weights/resnet50_weights/010_1.000.pkl'
+    load_file = 'weights/resnet50_weights/' + weightslist[weightsnum]
+    # load_file = 'weights/resnet50_weights/010_1.000.pkl'
     # for weightfile in range(weightsnum):
         # if not weightslist[weightfile].startswith('LOG'):  # avoid LOG.txt
             # load_file = 'weights/resnet50_weights/' + weightslist[weightfile]
 
     use_gpu = torch.cuda.is_available()
     if use_gpu:
-        print("Using " + str(torch.cuda.device_count()) + 'GPU(s)')
+        print("Using " + str(torch.cuda.device_count()) + ' GPU(s)')
         if torch.cuda.device_count() > 1:
             gpu_ids = list(range(torch.cuda.device_count()))
             model = nn.DataParallel(model, device_ids=gpu_ids).cuda()
-        else:
-            model = model.cuda()
+        # else:
+        #     model = model.cuda()
 
     model.load_state_dict(torch.load(os.path.join('./', load_file)))
     model.eval()
@@ -74,11 +75,25 @@ def main():
         img_tensor.unsqueeze_(0)
         img_variable = Variable(img_tensor)
         fc_out = model(img_variable)
-        if use_gpu:
+
+        logit = model(img_variable)
+#        # imagenet category list
+#        # classes = {int(key): value for (key, value) in result_classes.items()}
+#
+#        h_x = F.softmax(logit).data.squeeze()
+#        probs, idx = h_x.sort(0, True)
+#        print(probs)
+#
+#        # # output the prediction
+#        # for i in range(0, 2):
+#        #    print('{:.3f} -> {}'.format(probs[i], classes[idx[i].item()]))
+
+        # if use_gpu:
+        if torch.cuda.device_count() > 1:
             prediction = fc_out.data.cpu().numpy().argmax()
         else:
             prediction = fc_out.data.numpy().argmax()
-        print(filename + ": " + result_classes[prediction])
+        print(filename + ": " + ' -> ' + str(nn.functional.softmax(fc_out.data)) + ' -> ' + result_classes[prediction])
         copyfile(path + "/" + filename, path + "/" + result_classes[prediction] + "/" + filename)
 
 
