@@ -28,15 +28,15 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-n', '--network',
-    choices=['resnet18', 'resnet50', 'resnet152', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet50',
+    choices=['resnet18', 'resnet50', 'resnet152', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet152',
     help='Choose which neural network to use')
 args = parser.parse_args()
 network = args.network
 
 
 result_classes = {
-    0: 'no_THA',
-    1: 'yes_THA',
+    0: 'od',
+    1: 'os',
     # 2: 'yes_HRA'
 }
 
@@ -69,7 +69,7 @@ def main():
         print('model is resnet50')
     elif args.network == 'resnet152':
         model = ResNet152_pretrained(n_classes, freeze=False)
-        print('model is resnet50')
+        print('model is resnet152')
     elif args.network == 'inception_v3':
         model = inception_v3_pretrained(n_classes, freeze=False)
         print('model is inception_v3')
@@ -115,7 +115,7 @@ def train_model(model, criterion, optimizer, scheduler, network, num_epochs=num_
             transforms.Resize((256, 256)),
             transforms.RandomRotation((-5, +5)),
             transforms.RandomCrop(224),
-            transforms.RandomHorizontalFlip(),
+            # transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             # transforms.Normalize(mean=[0.485, 0.456, 0.406],
             #                      std=[0.229, 0.224, 0.225]),
@@ -138,7 +138,7 @@ def train_model(model, criterion, optimizer, scheduler, network, num_epochs=num_
             transforms.Resize((300, 300)),
             transforms.RandomRotation((-5, +5)),
             transforms.RandomCrop(299),
-            transforms.RandomHorizontalFlip(),
+            # transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             # transforms.Normalize(mean=[0.485, 0.456, 0.406],
             #                      std=[0.229, 0.224, 0.225]),
