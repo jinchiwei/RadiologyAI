@@ -34,14 +34,14 @@ from sklearn import metrics
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--network',
-        choices=['resnet18', 'resnet50', 'resnet152', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet50',
+        choices=['resnet18', 'resnet50', 'resnet152', 'inception_v3', 'alexnet', 'squeezenet', 'vggnet', 'densenet'], default='resnet152',
         help='Choose which neural network to use')
     args = parser.parse_args()
     network = args.network
 
     result_classes = {
-        0: 'no_THA',
-        1: 'yes_THA'
+        0: 'od',
+        1: 'os'
     }
     n_classes = len(result_classes)
 
@@ -52,7 +52,7 @@ def main():
     elif args.network == 'resnet50':
         model = ResNet50_pretrained(n_classes, freeze=False)
         print('model is resnet50')
-    elif args.network == 'resnet125':
+    elif args.network == 'resnet152':
         model = ResNet152_pretrained(n_classes, freeze=False)
         print('model is resnet152')
     elif args.network == 'inception_v3':
@@ -198,8 +198,10 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile, n
     output.write('---------  accuracy: {:.4f} -----------'.format(float(running_corrects) / total) + "\n")
 
     if n_classes < 3:  # roc/auc for binary output
-        roc_auc_metrics(y_true, y_score, n_classes, weightfile, network)  # call statistics file for roc/auc
-
+        auc_score = roc_auc_metrics(y_true, y_score, n_classes, weightfile, network)  # call statistics file for roc/auc
+        print('auc_score: ', auc_score)
+        output.write('auc_score: ' + str(auc_score) + '\n')
+    
     sensitivity  = TP / (TP + FN)
     specificity  = TN / (TN + FP)
     pos_like_ratio = sensitivity / (1 - specificity)

@@ -49,4 +49,5 @@ def roc_auc_metrics(y_true, y_score, n_classes, weightfile, network):
     plt.savefig('roc_' + network + '_' + str(weightfile) + '.png')
 
     auc_score = metrics.roc_auc_score(y_true[:, 1], y_score[:, 1])
-    print('auc_score: ', auc_score)
+    # print('auc_score: ', auc_score)
+    return auc_score
