@@ -187,6 +187,8 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile, n
             # print('here', idx)
         """
 
+    calc_stats(y_true, y_score, n_classes)
+
     print('---------  correct: {:03d} -----------'.format(running_corrects))
     print('---------  total: {:03d} -----------'.format(total))
     print('---------  accuracy: {:.4f} -----------'.format(float(running_corrects)/total))
@@ -222,6 +224,28 @@ def test(use_gpu, n_classes, load_file, val_data_transform, model, weightfile, n
         '%f\nTP: %f\nTN: %f\nFP: %f\nFN: %f'
         % (sensitivity, specificity, pos_like_ratio, neg_like_ratio, pos_pred_val, neg_pred_val, TP, TN, FP, FN))
     output.close()
+
+
+def calc_threshold(y_true, y_score):
+    # Calculate ideal threshold, that gives best f-beta
+    pre, rec, thresholds = metrics.precision_recall_curve(y_true, y_score)
+    
+    # ignore 0 p and r records
+    f1th = [((2 * (p * r) / (p + r)), t) for p, r, t in zip(pre, rec, thresholds) if r and p]
+    
+    f1, thresholds = zip(*f1th)
+    fm = np.argmax(f1)
+    f1, threshold = f1[fm], thresholds[fm]
+    return threshold
+
+def calc_stats(y_true, y_score, n_classes):
+    y_true = np.concatenate(y_true)
+    y_score = np.concatenate(y_score)[:,1]
+    thresh = calc_threshold(y_true, y_score)
+    predictions = y_score > thresh
+    accuracy = metrics.accuracy_score(y_true, predictions)
+    precision, recall, f_beta, _ = metrics.precision_recall_fscore_support(y_true, predictions, average='binary')
+    print('Accuracy: {:>2.3f}, Precision: {:>2.2f}, Recall: {:>2.2f}, f-1: {:>2.3f}'.format(accuracy, precision, recall, f_beta))
 
 
 if __name__ == '__main__':
