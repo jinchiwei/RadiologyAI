@@ -7,12 +7,13 @@ from matplotlib import pyplot as plt
 
 result_classes = {
     0: 'no_THA',
-    1: 'yes_THA',
+    # 1: 'yes_THA',
     # 2: 'yes_HRA'
 }
 
-dataset_dir = 'dataset/100_20_30'
+dataset_dir = 'dataset'
 directories = {}
+# directories = {'pneumonia_pure' : 'pneumonia_pure'}
 for class_num in result_classes:
     directories['train_' + str(class_num)] = result_classes[class_num] + '_train'
     directories['val_' + str(class_num)] = result_classes[class_num] + '_val'
