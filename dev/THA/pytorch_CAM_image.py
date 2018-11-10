@@ -65,7 +65,7 @@ elif model_id == 4:
     weightsnum = len(weightslist) - 1
     if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
         weightsnum = weightsnum - 1
-    load_files = 'weights/resnet152_weights/' + weightslist[weightsnum]
+    load_file = 'weights/resnet152_weights/' + weightslist[weightsnum]
     net.load_state_dict(torch.load(os.path.join('./', load_file)))
     finalconv_name = 'layer4'
 net.eval()
