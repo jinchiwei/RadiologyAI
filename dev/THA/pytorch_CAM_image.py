@@ -37,7 +37,7 @@ if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 ###  choose model
-model_id = 3 # we are using ResNet50 by default
+model_id = 4  # we are using ResNet152 by default
 if model_id == 1:
     net = models.squeezenet1_1(pretrained=True)
     finalconv_name = 'features'
@@ -57,6 +57,15 @@ elif model_id == 3:
     if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
         weightsnum = weightsnum - 1
     load_file = 'weights/resnet50_weights/' + weightslist[weightsnum]
+    net.load_state_dict(torch.load(os.path.join('./', load_file)))
+    finalconv_name = 'layer4'
+elif model_id == 4:
+    net = ResNet152_pretrained(2, freeze=False)
+    weightslist = os.listdir('weights/resnet152_weights')
+    weightsnum = len(weightslist) - 1
+    if weightslist[weightsnum].startswith('LOG'):  # avoid LOG.txt
+        weightsnum = weightsnum - 1
+    load_files = 'weights/resnet152_weights/' + weightslist[weightsnum]
     net.load_state_dict(torch.load(os.path.join('./', load_file)))
     finalconv_name = 'layer4'
 net.eval()
