@@ -11,7 +11,7 @@ import cv2
 
 import torch
 import os, sys
-from models import ResNet18_pretrained, ResNet50_pretrained
+from models import ResNet18_pretrained, ResNet50_pretrained, ResNet152_pretrained
 
 
 # input images
