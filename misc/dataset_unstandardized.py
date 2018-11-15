@@ -6,17 +6,17 @@ import numpy as np
 
 ############ dataloader ############
 result_classes = {
-    0: 'OD',
-    1: 'OS',
+    0: 'no_THA',
+    1: 'yes_THA',
     # 2: 'yes_HRA'
 }
 
-dataset_dir = 'dataset'
+dataset_dir = 'dataset/100_20_30'
 directories = {}
 for class_num in result_classes:
-    directories['train_' + str(class_num)] = os.path.join('train', result_classes[class_num])
-    directories['val_' + str(class_num)] = os.path.join('val', result_classes[class_num])
-    directories['test_' + str(class_num)] = os.path.join('test', result_classes[class_num])
+    directories['train_' + str(class_num)] = result_classes[class_num] + '_train'
+    directories['val_' + str(class_num)] = result_classes[class_num] + '_val'
+    directories['test_' + str(class_num)] = result_classes[class_num] + '_test'
 
 # directories = {
 #     'train_0' : 'no_THA_train',
