@@ -4,6 +4,7 @@
 
 import os
 from shutil import copyfile
+from random import shuffle
 
 dir1 = input("Source directory: ")
 dir2 = input("New training directory: ")
@@ -15,8 +16,17 @@ num3 = int(input("Number of test files: "))
 
 onlyfiles = [f for f in os.listdir(dir1) if os.path.isfile(os.path.join(dir1, f))]
 
-# for i in range(6):
-# 	AP_line = AP.readline()
+# randomize
+shuffle(onlyfiles)
+
+# automatically sort 70-10-20 train-val-test
+# numfiles = len(onlyfiles)
+# num1 = numfiles * 0.7
+# num2 = numfiles * 0.1
+# num3 = numfiles * 0.2
+
+# if num1 + num2 + num3 < numfiles
+#     num2 += 1
 
 for i in range(num1):
 	copyfile(dir1 + "/" + onlyfiles[i], dir2 + "/" + onlyfiles[i])
