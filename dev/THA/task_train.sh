@@ -2,7 +2,7 @@
 
 #SBATCH
 #SBATCH --job-name=mxj_WH
-#SBATCH --time=3-00:00:00
+#SBATCH --time=2-00:00:00
 #SBATCH --partition=gpuk80
 #SBATCH --gres=gpu:3
 #SBATCH --nodes=1
